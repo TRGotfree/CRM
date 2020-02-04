@@ -14,21 +14,18 @@ namespace CRM.Models
         public int Id { get; set; }
         
         [Required]
+        [MaxLength(200)]
         public string Name { get; set; }
 
         [Required]
+        [MaxLength(200)]
         public string Address { get; set; }
 
-        [Required]
-        public string Phones { get; set; }
-
+        [MaxLength(200)]
         public string Email { get; set; }
 
+        [MaxLength(2000)]
         public string Comment { get; set; }
-
-        public string HeadManager { get; set; }
-
-        public string AccountManager { get; set; }
 
         [Required]
         public int ClientId { get; set; }
