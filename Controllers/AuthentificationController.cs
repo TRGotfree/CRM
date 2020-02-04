@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FlexFinCRM.Controllers
+namespace CRM.Controllers
 {
     public class AuthentificationController : Controller
     {
         // GET: Authentification
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }

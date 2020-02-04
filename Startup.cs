@@ -19,7 +19,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace FlexFinCRM
+namespace CRM
 {
     public class Startup
     {
