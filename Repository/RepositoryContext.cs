@@ -24,6 +24,7 @@ namespace CRM.Repository
         public DbSet<ClientType> ClientType { get; set; }
         public DbSet<Client> Client { get; set; }
         public DbSet<Employee> Employee { get; set; }
+        public DbSet<Phone> Phone { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
