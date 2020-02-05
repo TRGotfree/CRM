@@ -10,5 +10,6 @@ namespace CRM.Interfaces
     public interface IJWTProvider
     {
         JwtSecurityToken GetToken(ClaimsIdentity claims);
+        string WriteToken(JwtSecurityToken jwtSecurityToken);
     }
 }

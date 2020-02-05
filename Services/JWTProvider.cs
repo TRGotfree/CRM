@@ -36,5 +36,13 @@ namespace CRM.Services
 
             return newToken;
         }
+
+        public string WriteToken(JwtSecurityToken jwtSecurityToken)
+        {
+            if (jwtSecurityToken == null)
+                throw new ArgumentNullException(nameof(jwtSecurityToken));
+
+            return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+        }
     }
 }

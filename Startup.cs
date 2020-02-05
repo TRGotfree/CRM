@@ -40,7 +40,6 @@ namespace CRM
             services.AddControllers();
 
             if (hostingEnvironment.IsDevelopment())
-            {
                 services.AddCors(policy => policy.AddPolicy("DevPolicy", policyBuilder =>
                 {
                     policyBuilder
@@ -48,8 +47,7 @@ namespace CRM
                     .AllowAnyOrigin()
                     .AllowAnyHeader();
                 }));
-            }
-
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    .AddJwtBearer(options =>
                    {
@@ -92,22 +90,17 @@ namespace CRM
             app.UseRouting();
 
             app.UseAuthorization();
+            
             app.UseStaticFiles();
+            app.UseDefaultFiles();
+
             app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
-
-            if (hostingEnvironment.IsProduction())
-                return;
-
-            app.Run(async (context) =>
-            {
-                context.Response.ContentType = "text/html";
-
-                await context.Response.SendFileAsync(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"));
+                endpoints.MapControllerRoute(name: "default", pattern: "{controller=Index}/{action=Index}/{id?}");
+                endpoints.MapFallbackToController("Index", "Index");
             });
         }
     }
