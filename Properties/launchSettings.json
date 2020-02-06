@@ -12,18 +12,28 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "authetification",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CONN_STRING": "Data Source=localhost;Initial Catalog=CRM;Integrated Security=True;Connect Timeout=30;",
+        "JWT_KEY": "_*cf247118689211131*_",
+        "JWT_ISSUER": "CRM",
+        "JWT_LIFETIME": "60",
+        "JWT_AUDIENCE": "CRM"
       }
     },
-    "FlexFinCRM": {
+    "CRM": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "authetification",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CONN_STRING": "Data Source=localhost;Initial Catalog=CRM;Integrated Security=True;Connect Timeout=30;",
+        "JWT_KEY": "_*cf247118689211131*_",
+        "JWT_ISSUER": "CRM",
+        "JWT_LIFETIME": "60",
+        "JWT_AUDIENCE": "CRM"
       }
     }
   }

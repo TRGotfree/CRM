@@ -69,11 +69,11 @@ namespace CRM
                    });
 
             services.AddDbContext<RepositoryContext>(options => options.UseSqlServer(connectionString));
+            services.AddTransient<AuthentificationOptionsProvider>();
             services.AddTransient<IHashGenerator, HashGenerator>();
             services.AddTransient<ICustomLogger, CustomLogger>();
             services.AddTransient<IJWTProvider, JWTProvider>();
             services.AddTransient<IUserIdentityProvider, UserIdentityProvider>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

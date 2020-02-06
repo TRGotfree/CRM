@@ -1,0 +1,16 @@
+<mat-card>
+  <mat-card-title>
+    Введите свой логин и пароль
+  </mat-card-title>
+  <mat-card-content>
+    <mat-form-field>
+        <input type="text" matInput placeholder="Ваш логин" [(ngModel)]="login">
+    </mat-form-field>
+    <mat-form-field>
+        <input type="password" matInput placeholder="Ваш пароль" [(ngModel)]="password">
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button (click)="authUser()" mat-raised-button color="primary">Войти</button>
+  </mat-card-actions>
+</mat-card>

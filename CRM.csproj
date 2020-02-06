@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApplication\" />
+    <Compile Remove="ClientApplication\**" />
+    <Content Remove="ClientApplication\**" />
+    <EmbeddedResource Remove="ClientApplication\**" />
+    <None Remove="ClientApplication\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

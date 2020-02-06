@@ -33,9 +33,8 @@ namespace CRM.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Сheck([FromBody] DTOModels.User user)
+        public IActionResult Post([FromBody] DTOModels.User user)
         {
-
             try
             {
                 if (!ModelState.IsValid)
@@ -44,10 +43,10 @@ namespace CRM.Controllers
                 string passwordHash = hashGenerator.GetHash(user.Password);
                 var userData = repositoryContext.User.FirstOrDefault(u => u.Login == user.Login && u.Password == passwordHash);
                 if (userData == null)
-                    return StatusCode((int)HttpStatusCode.NotFound, new { message = ServerMessage.USER_NOT_AUTHORIZED });
+                    return StatusCode(401, new { message = ServerMessage.USER_NOT_AUTHORIZED });
 
                 if (!userData.IsActive)
-                    return StatusCode((int)HttpStatusCode.NotFound, new { message = ServerMessage.USER_ACCOUNT_DEACTIVATED });
+                    return StatusCode(401, new { message = ServerMessage.USER_ACCOUNT_DEACTIVATED });
 
                 var userIdentityClaim = userIdentityProvider.GetIdentity(userData.Login);
                 var jwtToken = jWTProvider.GetToken(userIdentityClaim);
