@@ -37,7 +37,7 @@ namespace CRM
         {
             string connectionString = Environment.GetEnvironmentVariable("CONN_STRING");
 
-            services.AddControllers();
+            //services.AddControllers();
 
             if (hostingEnvironment.IsDevelopment())
                 services.AddCors(policy => policy.AddPolicy("DevPolicy", policyBuilder =>
@@ -47,7 +47,7 @@ namespace CRM
                     .AllowAnyOrigin()
                     .AllowAnyHeader();
                 }));
-            
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    .AddJwtBearer(options =>
                    {
@@ -65,7 +65,6 @@ namespace CRM
                            IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
                            ValidateIssuerSigningKey = true
                        };
-
                    });
 
             services.AddDbContext<RepositoryContext>(options => options.UseSqlServer(connectionString));
@@ -74,6 +73,8 @@ namespace CRM
             services.AddTransient<ICustomLogger, CustomLogger>();
             services.AddTransient<IJWTProvider, JWTProvider>();
             services.AddTransient<IUserIdentityProvider, UserIdentityProvider>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,20 +88,29 @@ namespace CRM
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
 
-            app.UseAuthorization();
-            
-            app.UseStaticFiles();
-            app.UseDefaultFiles();
+            if (env.IsProduction())
+            {
+                app.UseStaticFiles();
+                app.UseDefaultFiles();
+            }
 
             app.UseAuthentication();
+
+            app.UseRouting();
+
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapControllerRoute(name: "default", pattern: "{controller=Index}/{action=Index}/{id?}");
-                endpoints.MapFallbackToController("Index", "Index");
+                //endpoints.MapControllerRoute("default", "{controller}/{action?}/{id?}");
+                //endpoints.MapControllerRoute("with_action_route", "{controller}/{action}/{id?}");
+                //endpoints.MapControllerRoute("without_action_route", "{controller}/{id?}");
+                //endpoints.MapControllerRoute(name: "default", pattern: "{controller=Index}/{action=Index}/{id?}");
+
+                if (env.IsProduction())
+                    endpoints.MapFallbackToController("Index", "Index");
             });
         }
     }

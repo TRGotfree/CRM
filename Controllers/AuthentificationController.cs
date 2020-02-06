@@ -10,9 +10,12 @@ using CRM.Interfaces;
 using CRM.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CRM.Controllers
 {
+    [Route("[controller]")]
+    [ApiController]
     public class AuthentificationController : Controller
     {
         private readonly ICustomLogger logger;
@@ -32,6 +35,7 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public IActionResult Post([FromBody] DTOModels.User user)
         {

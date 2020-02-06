@@ -26,7 +26,7 @@ export class AuthService {
       throw new Error('Password not specified!');
     }
 
-    let url = '/api/authentification';
+    let url = '/authentification';
 
     if (!environment.production) {
       url = environment.devApiUrl + url;

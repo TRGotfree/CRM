@@ -33,12 +33,11 @@ export class AuthComponent implements OnInit {
         return;
       }
 
-      const user: User = { login: this.login, password: this.password, name: null };
+      const user: User = { login: this.login, password: this.password, name: '' };
       this.authService.checkCredentials(user).subscribe((data) => {
 
+        const test = '';
 
-
-        
       }, error => {
         if (error.status === 401) {
           this.snackBar.open(`${error.status} Сервер вернул ошибку!`, 'OK', { duration: 3000 });

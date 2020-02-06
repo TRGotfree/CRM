@@ -1,0 +1,41 @@
+#auth-container {
+    /* margin-top: 20%; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+mat-card-title {
+    margin-top: 20pt;
+    color: #673AB7;
+}
+
+mat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 300px;
+}
+
+mat-card-content {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+mat-card-actions {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20pt;
+}
+
+button[mat-raised-button]{
+    width: 80%;
+    margin-bottom: 20pt;
+}
