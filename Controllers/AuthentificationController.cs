@@ -16,6 +16,7 @@ namespace CRM.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthentificationController : Controller
     {
         private readonly ICustomLogger logger;
@@ -36,7 +37,7 @@ namespace CRM.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Post([FromBody] DTOModels.User user)
         {
             try

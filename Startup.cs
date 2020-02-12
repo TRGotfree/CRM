@@ -88,7 +88,6 @@ namespace CRM
 
             app.UseHttpsRedirection();
 
-
             if (env.IsProduction())
             {
                 app.UseStaticFiles();
