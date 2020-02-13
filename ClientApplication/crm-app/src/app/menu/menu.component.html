@@ -1,0 +1,26 @@
+<mat-toolbar>
+  <button *ngIf="!sideBarOpened" mat-button (click)="sideNav.toggle()">
+    <mat-icon>view_headline</mat-icon>
+  </button>
+  <button *ngIf="sideBarOpened" mat-button (click)="sideNav.toggle()">
+    <mat-icon>clear</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-sidenav-container hasBackdrop="true">
+  <mat-sidenav #sideNav mode="side" [(opened)]="sideBarOpened">
+    <div id="side-nav-container">
+      <mat-action-list>
+        <button mat-list-item *ngFor="let item of menuItems">
+          <mat-icon>{{item.icon}}</mat-icon>
+          {{item.title}}
+        </button>
+      </mat-action-list>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div id="sidenav-content">
+      <ng-content select="[content]">
+      </ng-content>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

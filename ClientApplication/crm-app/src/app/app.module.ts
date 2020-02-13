@@ -8,18 +8,31 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HomeComponent } from './home/home.component';
+import { MenuComponent } from './menu/menu.component';
+import { DictionaryComponent } from './dictionary/dictionary.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    HomeComponent,
+    MenuComponent,
+    DictionaryComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -30,10 +43,17 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatCardModule,
     MatSnackBarModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatListModule,
+    MatGridListModule
   ],
   providers: [ { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true } ],
 
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+
+  exports: [MenuComponent]
 })
 export class AppModule { }

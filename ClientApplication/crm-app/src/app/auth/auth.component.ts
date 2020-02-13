@@ -13,9 +13,8 @@ export class AuthComponent implements OnInit {
 
   constructor(private router: Router, private snackBar: MatSnackBar, private authService: AuthService) { }
 
-  private login: string;
-  private password: string;
-
+  login: string;
+  password: string;
 
   ngOnInit() {
   }
@@ -34,12 +33,13 @@ export class AuthComponent implements OnInit {
       }
 
       const user: User = { login: this.login, password: this.password, name: '' };
-      this.authService.checkCredentials(user).subscribe((data) => {
+      this.authService.checkCredentials(user).subscribe((data: { token: '' }) => {
 
-        const test = '';
+      sessionStorage.setItem('jwt', `Bearer ${data.token}`);
+      this.router.navigate(['/home']);
 
       }, error => {
-        if (error.status === 401) {
+        if (error.status !== 401 && error.status !== 403) {
           this.snackBar.open(`${error.status} Сервер вернул ошибку!`, 'OK', { duration: 3000 });
         } else {
           this.snackBar.open(`${error.status} Неверный логин или пароль!`, 'OK', { duration: 3000 });

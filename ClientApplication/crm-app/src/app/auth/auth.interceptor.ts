@@ -1,19 +1,32 @@
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+
+    constructor(private router: Router) { }
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-        const token = sessionStorage.getItem('token');
-        if (!token) {
-            return next.handle(req);
+        if (sessionStorage.getItem('token')) {
+            req = req.clone({
+                setHeaders: {
+                    Authorization: sessionStorage.getItem('token')
+                }
+            });
         }
 
-        const requestWithAuth = req.clone({ headers: req.headers.set('Authorization', token) });
+        return next.handle(req).pipe(catchError((error: HttpErrorResponse) => {
+            if (error && error.status === 401 || error.status === 403) {
+                this.router.navigate(['/authentification']);
+            }
+            return throwError(error);
 
-        return next.handle(requestWithAuth);
+        }));
+
     }
-
 }

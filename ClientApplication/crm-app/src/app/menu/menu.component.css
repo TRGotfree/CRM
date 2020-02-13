@@ -1,0 +1,37 @@
+#side-nav-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 20vw;
+}
+
+mat-toolbar {
+  background-color: #673AB7;
+  min-width: 100%;
+}
+
+#menu-button {
+  margin-left: -10pt;
+}
+
+mat-toolbar mat-icon {
+  color: white;
+}
+
+#sidenav-content {
+  height: 100vh;
+}
+
+mat-action-list {
+    width: 100%;
+}
+
+.mat-list-item {
+  width: 100%;
+  color: #673AB7
+}
+
+.mat-list-item mat-icon {
+    margin-right: 5pt;
+}

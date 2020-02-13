@@ -88,11 +88,8 @@ namespace CRM
 
             app.UseHttpsRedirection();
 
-            if (env.IsProduction())
-            {
-                app.UseStaticFiles();
-                app.UseDefaultFiles();
-            }
+            app.UseStaticFiles();
+            app.UseDefaultFiles();
 
             app.UseAuthentication();
 
@@ -103,13 +100,7 @@ namespace CRM
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                //endpoints.MapControllerRoute("default", "{controller}/{action?}/{id?}");
-                //endpoints.MapControllerRoute("with_action_route", "{controller}/{action}/{id?}");
-                //endpoints.MapControllerRoute("without_action_route", "{controller}/{id?}");
-                //endpoints.MapControllerRoute(name: "default", pattern: "{controller=Index}/{action=Index}/{id?}");
-
-                if (env.IsProduction())
-                    endpoints.MapFallbackToController("Index", "Index");
+                endpoints.MapFallbackToController("Index", "Index");
             });
         }
     }
