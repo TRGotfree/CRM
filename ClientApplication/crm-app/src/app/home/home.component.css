@@ -1,0 +1,13 @@
+mat-grid-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+mat-card {
+    margin-top: 10pt;
+    margin-bottom: 10pt;
+    height: 80%;
+    width: 50%;
+}

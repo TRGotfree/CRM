@@ -1,9 +1,9 @@
 <app-menu [menuItems]="menuItems">
-    <mat-grid-list cols="2" rowHeight="100px">
+    <mat-grid-list cols="2" rowHeight="30vh">
         <mat-grid-tile *ngFor="let item of menuItems">
              <mat-card>
                  <mat-card-header>
-                    <mat-card-title>item.title</mat-card-title>
+                    <mat-card-title>{{item.title}}</mat-card-title>
                  </mat-card-header>
                  <img *ngIf="item.image" mat-card-image [src]="item.image">
                  <mat-card-content>
