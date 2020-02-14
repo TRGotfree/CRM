@@ -15,10 +15,11 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.menuItems = [
-      { title: 'Задачи', icon: 'done_outline', link: '', imageLink: '' },
-      { title: 'Клиенты', icon: 'face', link: '', imageLink: '' },
-      { title: 'База знаний', icon: 'book', link: '', imageLink: '' },
-      { title: 'Настройки', icon: 'settings', link: '', imageLink: '' }
+      { title: 'Задачи', description: '', icon: 'done_outline', link: '', imageLink: '' },
+      { title: 'Клиенты', description: '', icon: 'face', link: '', imageLink: '' },
+      { title: 'Контакты', description: '', icon: 'contacts', link: '', imageLink: '' },
+      { title: 'База знаний', description: '', icon: 'book', link: '', imageLink: '' },
+      { title: 'Настройки', description: '', icon: 'settings', link: '/settings', imageLink: 'assets/img/settings.png' }
     ];
 
   }

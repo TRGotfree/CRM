@@ -11,6 +11,7 @@ using CRM.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Controllers
 {
@@ -44,7 +45,7 @@ namespace CRM.Controllers
                     return BadRequest(new { message = ServerMessage.NOT_VALID_PARAMETERS });
 
                 string passwordHash = hashGenerator.GetHash(user.Password);
-                var userData = repositoryContext.User.FirstOrDefault(u => u.Login == user.Login && u.Password == passwordHash);
+                var userData = repositoryContext.User.Include(u => u.UserRole).FirstOrDefault(u => u.Login == user.Login && u.Password == passwordHash);
                 if (userData == null)
                     return StatusCode(401, new { message = ServerMessage.USER_NOT_AUTHORIZED });
 
@@ -54,7 +55,13 @@ namespace CRM.Controllers
                 var userIdentityClaim = userIdentityProvider.GetIdentity(userData.Login);
                 var jwtToken = jWTProvider.GetToken(userIdentityClaim);
 
-                return Ok(new { token = jWTProvider.WriteToken(jwtToken) });
+                return Ok(new { token = jWTProvider.WriteToken(jwtToken), user = 
+                    new CRM.DTOModels.User { 
+                        Login = userData.Login, 
+                        Name = userData.Name, 
+                        RoleId = userData.UserRoleId,
+                        RoleName = userData.UserRole.Name
+                    } });
             }
             catch (Exception ex)
             {

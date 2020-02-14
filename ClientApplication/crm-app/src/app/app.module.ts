@@ -23,6 +23,7 @@ import { HomeComponent } from './home/home.component';
 import { MenuComponent } from './menu/menu.component';
 import { DictionaryComponent } from './dictionary/dictionary.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { SettingsComponent } from './settings/settings.component';
     HomeComponent,
     MenuComponent,
     DictionaryComponent,
-    SettingsComponent
+    SettingsComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +56,6 @@ import { SettingsComponent } from './settings/settings.component';
 
   bootstrap: [AppComponent],
 
-  exports: [MenuComponent]
+  exports: [MenuComponent, ToolbarComponent]
 })
 export class AppModule { }

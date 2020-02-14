@@ -3,4 +3,5 @@ export interface MenuItem {
     icon: string;
     link: string;
     imageLink: string;
+    description: string;
 }

@@ -32,10 +32,11 @@ export class AuthComponent implements OnInit {
         return;
       }
 
-      const user: User = { login: this.login, password: this.password, name: '' };
-      this.authService.checkCredentials(user).subscribe((data: { token: '' }) => {
+      const user: User = { login: this.login, password: this.password, name: '', roleId: 0, roleName: '' };
+      this.authService.checkCredentials(user).subscribe((data: { token: '', user: User }) => {
 
       sessionStorage.setItem('jwt', `Bearer ${data.token}`);
+      sessionStorage.setItem('user', JSON.stringify(data.user));
       this.router.navigate(['/home']);
 
       }, error => {

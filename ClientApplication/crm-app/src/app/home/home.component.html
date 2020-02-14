@@ -1,15 +1,22 @@
 <app-menu [menuItems]="menuItems">
-    <mat-grid-list cols="2" rowHeight="30vh">
-        <mat-grid-tile *ngFor="let item of menuItems">
-             <mat-card>
-                 <mat-card-header>
-                    <mat-card-title>{{item.title}}</mat-card-title>
-                 </mat-card-header>
-                 <img *ngIf="item.image" mat-card-image [src]="item.image">
-                 <mat-card-content>
-                    Some content (will be replaced)
-                 </mat-card-content>
-             </mat-card>
-        </mat-grid-tile>
-    </mat-grid-list>
+  <mat-grid-list cols="2" rowHeight="30vh">
+    <mat-grid-tile *ngFor="let item of menuItems">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{item.title}}</mat-card-title>
+        </mat-card-header>
+        <div class="card-image">
+          <img *ngIf="item.imageLink" mat-card-image [src]="item.imageLink">
+        </div>
+        <mat-card-content>
+          {{item.description}}
+        </mat-card-content>
+        <mat-card-actions>
+          <button [routerLink]="item.link" mat-raised-button color="accent">
+            Открыть
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
 </app-menu>
