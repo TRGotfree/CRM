@@ -1,3 +1,4 @@
+
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem } from '../models/menuItem';
 
@@ -15,11 +16,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.menuItems = [
-      { title: 'Задачи', description: '', icon: 'done_outline', link: '', imageLink: '' },
-      { title: 'Клиенты', description: '', icon: 'face', link: '', imageLink: '' },
-      { title: 'Контакты', description: '', icon: 'contacts', link: '', imageLink: '' },
-      { title: 'База знаний', description: '', icon: 'book', link: '', imageLink: '' },
-      { title: 'Настройки', description: '', icon: 'settings', link: '/settings', imageLink: 'assets/img/settings.png' }
+      { title: 'Задачи',
+      description: 'Ваши задачи требующие исполнения',
+        icon: 'done_outline', link: '', imageLink: '' },
+      { title: 'Клиенты', description: 'Список клиентов', icon: 'face', link: '', imageLink: '' },
+      { title: 'Контакты', description: 'Список контактов', icon: 'contacts', link: '', imageLink: '' },
+      { title: 'База знаний', description: 'Накопленные знания', icon: 'book', link: '', imageLink: '' },
+      { title: 'Настройки', description: 'Настройки CRM', icon: 'settings', link: '/settings', imageLink: '' }
     ];
 
   }

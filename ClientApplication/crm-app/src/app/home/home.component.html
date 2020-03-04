@@ -5,11 +5,13 @@
         <mat-card-header>
           <mat-card-title>{{item.title}}</mat-card-title>
         </mat-card-header>
-        <div class="card-image">
-          <img *ngIf="item.imageLink" mat-card-image [src]="item.imageLink">
-        </div>
         <mat-card-content>
-          {{item.description}}
+          <div class="card-image">
+            <i class="material-icons">
+              {{item.icon}}
+            </i>
+          </div>
+          <span class="description" [innerHTML]="item.description"></span>
         </mat-card-content>
         <mat-card-actions>
           <button [routerLink]="item.link" mat-raised-button color="accent">
