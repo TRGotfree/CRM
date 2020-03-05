@@ -16,9 +16,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.menuItems = [
-      { title: 'Задачи',
-      description: 'Ваши задачи требующие исполнения',
-        icon: 'done_outline', link: '', imageLink: '' },
+      { title: 'Задачи', description: 'Ваши задачи требующие исполнения', icon: 'done_outline', link: '', imageLink: '' },
       { title: 'Клиенты', description: 'Список клиентов', icon: 'face', link: '', imageLink: '' },
       { title: 'Контакты', description: 'Список контактов', icon: 'contacts', link: '', imageLink: '' },
       { title: 'База знаний', description: 'Накопленные знания', icon: 'book', link: '', imageLink: '' },

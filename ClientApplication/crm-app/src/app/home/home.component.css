@@ -25,7 +25,13 @@ mat-card {
 mat-card-header {
     width: 100%;
     border-bottom: #673AB7 solid 1pt;
-    color: rgb(19, 18, 18);
+}
+
+mat-card-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 mat-card-actions {
@@ -56,8 +62,9 @@ mat-card-content {
   margin-top: 3%;
 }
 
-.material-icons {
-  font-size: 38pt;
+mat-card-title .material-icons {
+  font-size: 20pt;
+  padding-right: 15px;
 }
 
 .description {

@@ -1,3 +1,5 @@
+// tslint:disable: max-line-length
+
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from '../models/menuItem';
 
@@ -13,7 +15,8 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit() {
     this.menuItems = [
-      { title: 'Справочники', icon: 'book', description: 'Редактирование справочников', imageLink: '', link: '/dictionary' }
+      { title: 'Справочники', description: 'Настройка и редактирование справочников', icon: 'book', link: '/dictionary', imageLink: '' },
+      { title: 'Пользователи', description: 'Настройка и редактирование пользователей', icon: 'account_box', link: '/user', imageLink: '' }
     ];
   }
 
