@@ -37,13 +37,15 @@ namespace CRM.Models
         [Required]
         public DateTime OpenDate { get; set; }
 
-        public DateTime UntilDate { get; set; }
+        public DateTime ExecuteTaskUntilDate { get; set; }
 
         [Required]
         public DateTime ChangeDate { get; set; }
 
         public DateTime CloseDate { get; set; }
 
+        public int PayloadId { get; set; }
 
+        public Payload Payload { get; set; }
     }
 }
