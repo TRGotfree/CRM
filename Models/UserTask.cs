@@ -25,7 +25,11 @@ namespace CRM.Models
         public UserTaskState UserTaskState { get; set; }
 
         [Required]
-        public int ExecutorUserId { get; set; } 
+        public int PriorityId { get; set; }
+
+        public Priority Priority { get; set; } 
+
+        public int? ExecutorUserId { get; set; } 
 
         public User ExecutorUser { get; set; }
 
@@ -44,7 +48,7 @@ namespace CRM.Models
 
         public DateTime CloseDate { get; set; }
 
-        public int PayloadId { get; set; }
+        public int? PayloadId { get; set; }
 
         public Payload Payload { get; set; }
     }

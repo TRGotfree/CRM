@@ -28,7 +28,7 @@ namespace CRM.Models
         public string Comment { get; set; }
 
         [Required]
-        public int ClientId { get; set; }
+        public int ClientTypeId { get; set; }
 
         public virtual ClientType ClientType { get; set; }
 

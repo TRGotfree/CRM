@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CRM.Constants;
 
 namespace CRM.Repository
 {
@@ -25,6 +26,11 @@ namespace CRM.Repository
         public DbSet<Client> Client { get; set; }
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Phone> Phone { get; set; }
+        public DbSet<UserTaskType> UserTaskType { get; set; }
+        public DbSet<UserTaskState> UserTaskState { get; set; }
+        public DbSet<UserTask> UserTask { get; set; }
+        public DbSet<Priority> Priority { get; set; }
+        public DbSet<Payload> Payload { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,10 +63,46 @@ namespace CRM.Repository
             modelBuilder.Entity<Client>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<Client>().Property(c => c.CreationDate).HasDefaultValue(DateTime.Now);
             modelBuilder.Entity<Client>().Property(c => c.IsActive).HasDefaultValue(true);
+            modelBuilder.Entity<Client>().HasIndex(c => c.ClientTypeId);
 
             modelBuilder.Entity<Employee>().HasKey(e => e.Id);
             modelBuilder.Entity<Employee>().Property(e => e.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Employee>().HasIndex(e => new { e.ClientId, e.Name, e.Position }).IsUnique();
+
+            modelBuilder.Entity<UserTaskType>().HasKey(u => u.Id);
+            modelBuilder.Entity<UserTaskType>().Property(u => u.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<UserTaskType>().HasIndex(u => u.Name).IsUnique();
+
+            modelBuilder.Entity<UserTaskState>().HasKey(u => u.Id);
+            modelBuilder.Entity<UserTaskState>().Property(u => u.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<UserTaskState>().HasIndex(u => u.Name).IsUnique();
+            modelBuilder.Entity<UserTaskState>().HasData(
+                new UserTaskState { Id = (int)UserTaskStates.New, Name = "Новая задача" },
+                new UserTaskState { Id = (int)UserTaskStates.Processing, Name = "Задача выполняется" },
+                new UserTaskState { Id = (int)UserTaskStates.Proceed, Name = "Задача выполнена" },
+                new UserTaskState { Id = (int)UserTaskStates.Canceled, Name = "Задача отменена" }
+            );
+
+            modelBuilder.Entity<Models.Priority>().HasKey(p => p.Id);
+            modelBuilder.Entity<Models.Priority>().Property(p => p.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Models.Priority>().HasIndex(p => p.Name).IsUnique();
+            modelBuilder.Entity<Models.Priority>().HasData(
+                new Models.Priority { Id = (int)Constants.Priority.Normal, Name = "Обычный" }, 
+                new Models.Priority { Id = (int)Constants.Priority.High, Name = "Высокий" }, 
+                new Models.Priority { Id = (int)Constants.Priority.Urgent, Name = "Срочный" });
+
+            modelBuilder.Entity<Payload>().HasKey(p => p.Id);
+            modelBuilder.Entity<Payload>().Property(p => p.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<UserTask>().HasKey(u => u.Id);
+            modelBuilder.Entity<UserTask>().Property(u => u.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<UserTask>().Property(u => u.OpenDate).HasDefaultValue(DateTime.Now);
+            modelBuilder.Entity<UserTask>().Property(u => u.ChangeDate).HasDefaultValue(DateTime.Now);
+            modelBuilder.Entity<UserTask>().Property(u => u.PriorityId).HasDefaultValue(1);
+            modelBuilder.Entity<UserTask>().Property(u => u.UserTaskStateId).HasDefaultValue(1);
+            modelBuilder.Entity<UserTask>().HasIndex(u => u.UserTaskStateId);
+            modelBuilder.Entity<UserTask>().HasIndex(u => u.UserTaskTypeId);
+            modelBuilder.Entity<UserTask>().HasIndex(u => u.PriorityId);
         }
     }
 }
