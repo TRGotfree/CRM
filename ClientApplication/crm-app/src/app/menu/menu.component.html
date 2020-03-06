@@ -16,6 +16,7 @@
           <mat-icon>{{item.icon}}</mat-icon>
           {{item.title}}
         </button>
+        <button *ngIf="isHomePage" routerLink="/settings" mat-list-item><mat-icon>settings</mat-icon>Настройки</button>
       </mat-action-list>
     </div>
   </mat-sidenav>

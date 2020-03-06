@@ -6,6 +6,8 @@ mat-grid-list {
 }
 
 mat-grid-tile {
+  display: flex;
+  flex-direction: column;
   margin-top: 10pt;
   margin-bottom: 10pt;
 }
@@ -13,18 +15,19 @@ mat-grid-tile {
 mat-card {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: flex-start;
-  margin-right: 30pt;
-  margin-left: 30pt;
+  margin-right: 10pt;
+  margin-left: 10pt;
   height: 80%;
   width: 100%;
-  color: #673AB7;
+  color: white;
+  background-color:  #3F51B5;
 }
 
 mat-card-header {
     width: 100%;
-    border-bottom: #673AB7 solid 1pt;
+    border-bottom: white solid 1pt;
 }
 
 mat-card-title {
@@ -40,15 +43,15 @@ mat-card-actions {
   justify-content: flex-end;
   align-items: flex-end;
   width: 100%;
-  height: 70%;
+  height: 100%;
 }
 
 mat-card-actions button a {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
   text-decoration: none;
+}
+
+mat-card-actions button {
+  width: 40%;
 }
 
 mat-card-content {
@@ -57,9 +60,9 @@ mat-card-content {
   justify-content: left;
   align-items: center;
   width: 100%;
-  /* height: 100%; */
-  margin-left: 3%;
-  margin-top: 3%;
+  height: 100%;
+  /* margin-left: 3%; */
+  /* margin-top: 3%; */
 }
 
 mat-card-title .material-icons {
@@ -70,4 +73,5 @@ mat-card-title .material-icons {
 .description {
     font-size: 14pt;
     padding-left: 3%;
+    /* color: #BB3268; */
 }

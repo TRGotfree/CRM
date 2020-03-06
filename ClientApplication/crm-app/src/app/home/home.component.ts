@@ -20,7 +20,6 @@ export class HomeComponent implements OnInit {
       { title: 'Клиенты', description: 'Список клиентов', icon: 'face', link: '', imageLink: '' },
       { title: 'Контакты', description: 'Список контактов', icon: 'contacts', link: '', imageLink: '' },
       { title: 'База знаний', description: 'Накопленные знания', icon: 'book', link: '', imageLink: '' },
-      { title: 'Настройки', description: 'Настройки CRM', icon: 'settings', link: '/settings', imageLink: '' }
     ];
 
   }
