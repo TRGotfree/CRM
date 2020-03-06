@@ -20,12 +20,13 @@ export class UserTaskService {
         }
 
         const httpParams = new HttpParams()
-        .set('numberOfRows', numberOfTasks.toString());
+            .set('numberOfRows', numberOfTasks.toString());
 
         return this.http.get(url, { params: httpParams });
     }
 
-    getSortedOrFilteredTasks(from: number, to: number, orderBy: string, sortBy: string, filterBy: string, filterValue: string): Observable<any> {
+    getSortedOrFilteredTasks(from: number, to: number,
+                             orderBy: string, sortBy: string, filterBy: string, filterValue: string): Observable<any> {
         try {
 
             let url = '/usertask';
@@ -34,6 +35,15 @@ export class UserTaskService {
                 url = environment.devApiUrl + url;
             }
 
+            const httpParams = new HttpParams()
+                .set('from', from.toString())
+                .set('to', to.toString())
+                .set('orderBy', orderBy)
+                .set('sortBy', sortBy)
+                .set('filterBy', filterBy)
+                .set('filterValue', filterValue);
+
+            return this.http.get(url, { params: httpParams });
 
         } catch (error) {
             throw error;
