@@ -29,7 +29,7 @@ namespace CRM.Repository
         public DbSet<UserTaskType> UserTaskType { get; set; }
         public DbSet<UserTaskState> UserTaskState { get; set; }
         public DbSet<UserTask> UserTask { get; set; }
-        public DbSet<Priority> Priority { get; set; }
+        public DbSet<Models.Priority> Priority { get; set; }
         public DbSet<Payload> Payload { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

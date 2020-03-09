@@ -13,4 +13,6 @@ export interface UserTask {
     taskManagerUserId: number;
     executeTaskUntilDate: string;
     payloadId: number;
+    isPayloadExists: boolean;
+    totalCountOfTasks: number;
 }

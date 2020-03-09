@@ -149,6 +149,13 @@ namespace CRM.Controllers
             }
         }
 
+
+        [HttpGet()]
+        public IActionResult Get()
+        {
+
+        }
+
         // POST: api/UserTask
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] DTOModels.UserTask userTask)
@@ -163,7 +170,7 @@ namespace CRM.Controllers
                 if (userTask.Id <= 0)
                     await repository.AddAsync(userTaskModel);
                 else
-                    repository.Update(userTaskModel);
+                    repository.Update(userTaskModel); 
 
                 await repository.SaveChangesAsync();
 

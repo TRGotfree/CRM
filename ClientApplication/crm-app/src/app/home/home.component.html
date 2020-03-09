@@ -18,6 +18,16 @@
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
-    
+
   </mat-grid-list>
+  <table mat-table [dataSource]="userTasks" matSort matSortDisableClear>
+    
+    <ng-container *ngFor="let gridColumn of gridColumns" [matColumnDef]="gridColumn.prop">
+      <th mat-header-cell *matHeaderCellDef>{{gridColumn.header}}</th>
+      <td mat-cell *matCellDef="let userTask"> {{userTask[gridColumn.prop]}} </td>
+    </ng-container>>
+    
+    <tr mat-header-row *matHeaderRowDef="visibleGridColumns"></tr>
+    <tr mat-row *matRowDef="let userTask; columns: visibleGridColumns"></tr>
+  </table>
 </app-menu>
