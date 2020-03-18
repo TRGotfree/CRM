@@ -8,10 +8,10 @@ namespace CRM.DTOModels
 {
     public class UserTask
     {
-        [Display(Name = "Id задачи")]
+        [Display(Name = "Id")]
         public ulong Id { get; set; }
 
-        [Display(Name = "Тип задачи")]
+        [Display(Name = "Тип")]
         public string UserTaskType { get; set; }
 
         [Required]
@@ -20,7 +20,7 @@ namespace CRM.DTOModels
         [Display(Name = "Описание")]
         public string Description { get; set; }
 
-        [Display(Name = "Статус задачи")]
+        [Display(Name = "Статус")]
         public string UserTaskState { get; set; }
 
         [Required]
@@ -37,13 +37,13 @@ namespace CRM.DTOModels
 
         public int? ExecutorUserId { get; set; }
 
-        [Display(Name = "Постановщик задачи")]
+        [Display(Name = "Постановщик")]
         public string TaskManagerUser { get; set; }
 
         [Required]
         public int TaskManagerUserId { get; set; }
 
-        [Display(Name = "Срок выполнения задачи")]
+        [Display(Name = "Срок выполнения")]
         public DateTime ExecuteTaskUntilDate { get; set; }
 
         public int? PayloadId { get; set; }

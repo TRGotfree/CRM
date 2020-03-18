@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class UserTaskService {
     constructor(private http: HttpClient) { }
 
-    getTasks(numberOfTasks: number): Observable<any> {
+    getTasks(numberOfTasks: number): Observable<{data: any[]}> {
 
         let url = '/usertask';
 
@@ -23,7 +23,7 @@ export class UserTaskService {
         const httpParams = new HttpParams()
             .set('numberOfRows', numberOfTasks.toString());
 
-        return this.http.get(url, { params: httpParams });
+        return this.http.get(url, { params: httpParams }) as Observable<{data: any[]}>;
     }
 
     getSortedOrFilteredTasks(from: number, to: number,
@@ -51,13 +51,13 @@ export class UserTaskService {
         }
     }
 
-    getUserTasksMeta(): Observable<UserTaskMeta[]> {
+    getUserTasksMeta(): Observable<{data: any[]}> {
         let url = '/usertask/meta';
 
         if (!environment.production) {
             url = environment.devApiUrl + url;
         }
 
-        return this.http.get(url) as Observable<UserTaskMeta[]>;
+        return this.http.get(url) as Observable<{data: any[]}>;
     }
 }

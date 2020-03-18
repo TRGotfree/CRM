@@ -17,6 +17,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress-spinner';
 
 import { TokenInterceptor } from './services/interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -58,7 +59,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     MatDividerModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatProgressSpinnerModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
 
