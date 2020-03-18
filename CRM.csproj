@@ -6,9 +6,17 @@
 
   <ItemGroup>
     <Compile Remove="ClientApplication\**" />
+    <Compile Remove="CRM.Tests\**" />
+    <Compile Remove="CRMRepository\**" />
     <Content Remove="ClientApplication\**" />
+    <Content Remove="CRM.Tests\**" />
+    <Content Remove="CRMRepository\**" />
     <EmbeddedResource Remove="ClientApplication\**" />
+    <EmbeddedResource Remove="CRM.Tests\**" />
+    <EmbeddedResource Remove="CRMRepository\**" />
     <None Remove="ClientApplication\**" />
+    <None Remove="CRM.Tests\**" />
+    <None Remove="CRMRepository\**" />
   </ItemGroup>
 
   <ItemGroup>

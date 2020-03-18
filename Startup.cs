@@ -69,6 +69,8 @@ namespace CRM
 
             services.AddDbContext<RepositoryContext>(options => options.UseSqlServer(connectionString));
             services.AddTransient<AuthentificationOptionsProvider>();
+            services.AddTransient<IRepository, RepositoryProvider>();
+            services.AddTransient<ITransformer, ModelTransformer>();
             services.AddTransient<IHashGenerator, HashGenerator>();
             services.AddTransient<ICustomLogger, CustomLogger>();
             services.AddTransient<IJWTProvider, JWTProvider>();
@@ -95,7 +97,7 @@ namespace CRM
 
             app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

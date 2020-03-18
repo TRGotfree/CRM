@@ -20,15 +20,15 @@ namespace CRM.Controllers
     public class AuthentificationController : Controller
     {
         private readonly ICustomLogger logger;
-        private readonly RepositoryContext repositoryContext;
+        private readonly IRepository repository;
         private readonly IHashGenerator hashGenerator;
         private readonly IUserIdentityProvider userIdentityProvider;
         private readonly IJWTProvider jWTProvider;
 
-        public AuthentificationController(RepositoryContext repositoryContext, ICustomLogger logger, 
+        public AuthentificationController(IRepository repository, ICustomLogger logger, 
             IHashGenerator hashGenerator, IUserIdentityProvider userIdentityProvider, IJWTProvider jWTProvider)
         {
-            this.repositoryContext = repositoryContext ?? throw new ArgumentNullException(nameof(repositoryContext));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.hashGenerator = hashGenerator ?? throw new ArgumentNullException(nameof(hashGenerator));
             this.userIdentityProvider = userIdentityProvider ?? throw new ArgumentNullException(nameof(userIdentityProvider));
@@ -45,7 +45,7 @@ namespace CRM.Controllers
                     return BadRequest(new { message = ServerMessage.NOT_VALID_PARAMETERS });
 
                 string passwordHash = hashGenerator.GetHash(user.Password);
-                var userData = repositoryContext.User.Include(u => u.UserRole).FirstOrDefault(u => u.Login == user.Login && u.Password == passwordHash);
+                var userData = repository.GetUser(user.Login, passwordHash);
                 if (userData == null)
                     return StatusCode(401, new { message = ServerMessage.USER_NOT_AUTHORIZED });
 

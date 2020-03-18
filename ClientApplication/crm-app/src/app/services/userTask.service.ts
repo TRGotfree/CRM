@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserTask } from '../models/userTask';
+import { UserTaskMeta } from '../models/userTaskMeta';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -48,5 +49,15 @@ export class UserTaskService {
         } catch (error) {
             throw error;
         }
+    }
+
+    getUserTasksMeta(): Observable<UserTaskMeta[]> {
+        let url = '/usertask/meta';
+
+        if (!environment.production) {
+            url = environment.devApiUrl + url;
+        }
+
+        return this.http.get(url) as Observable<UserTaskMeta[]>;
     }
 }

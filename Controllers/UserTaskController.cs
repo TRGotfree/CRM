@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -14,16 +15,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
-    [Authorize]
+
     public class UserTaskController : ControllerBase
     {
         private readonly ICustomLogger logger;
-        private readonly Repository.RepositoryContext repository;
+        private readonly IRepository repository;
         private readonly ITransformer modelTransformer;
 
-        public UserTaskController(ICustomLogger logger, Repository.RepositoryContext repository, ITransformer modelTransformer)
+        public UserTaskController(ICustomLogger logger, IRepository repository, ITransformer modelTransformer)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -38,15 +39,7 @@ namespace CRM.Controllers
                 if (numberOfRows > 100)
                     return BadRequest(new { message = "Couldn't return this count of tasks!" });
 
-                var newTasksInProcess = repository.UserTask
-                     .Include(u => u.Payload)
-                     .Include(u => u.Priority)
-                     .Include(u => u.TaskManagerUser)
-                     .Include(u => u.UserTaskState)
-                     .Include(u => u.UserTaskType)
-                     .Include(u => u.ExecutorUser)
-                     .Where(ut => ut.UserTaskStateId == (int)UserTaskStates.New ||
-                            ut.UserTaskStateId == (int)UserTaskStates.Proceed).Take(numberOfRows).ToArray();
+                var newTasksInProcess = repository.GetUserTasks(numberOfRows);
 
                 if (newTasksInProcess == null || newTasksInProcess.Length == 0)
                     return Ok(new { data = newTasksInProcess });
@@ -81,66 +74,8 @@ namespace CRM.Controllers
                 if (string.IsNullOrEmpty(sortBy))
                     return BadRequest(new { message = "sortBy parameter not specified!" });
 
-                var bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
-                var propertyToOrder = new DTOModels.UserTask().GetType()
-                       .GetProperty(sortBy, bindingFlags);
-
-                if (propertyToOrder == null)
-                    return StatusCode(400, new { message = $"Data couldn't be ordered by this parameter! Parameter name: {sortBy}" });
-
-                if (!string.IsNullOrWhiteSpace(filterBy) && !string.IsNullOrWhiteSpace(filterValue))
-                {
-                    PropertyInfo propertyToFilter = new DTOModels.UserTask().GetType()
-                              .GetProperty(filterBy, bindingFlags);
-
-                    if (propertyToFilter == null)
-                        return StatusCode(400, new { message = $"Data couldn't be filtered by this parameter! Parameter name: {filterBy}" });
-                    
-                    var tasks = repository.UserTask
-                                             .Include(u => u.Payload)
-                                             .Include(u => u.Priority)
-                                             .Include(u => u.TaskManagerUser)
-                                             .Include(u => u.UserTaskState)
-                                             .Include(u => u.UserTaskType)
-                                             .Include(u => u.ExecutorUser)
-                                             .Where(u => propertyToFilter.GetValue(u, null) != null &&
-                                                   propertyToFilter.GetValue(u, null).ToString().Contains(filterValue)).ToList();
-
-                    if (orderBy == OrderBy.ASCENDING)
-                        tasks = tasks.OrderBy(t => propertyToOrder.GetValue(t, null)).Skip(from).Take(to - from).ToList();
-                    else
-                        tasks = tasks.OrderByDescending(t => propertyToOrder.GetValue(t, null)).Skip(from).Take(to - from).ToList();
-
-                    return Ok(new { data = modelTransformer.UserTasksToDTOModels(tasks).ToArray() });
-                }
-
-                if (orderBy == OrderBy.ASCENDING)
-                {
-                    var tasks = repository.UserTask
-                                          .Include(u => u.Payload)
-                                          .Include(u => u.Priority)
-                                          .Include(u => u.TaskManagerUser)
-                                          .Include(u => u.UserTaskState)
-                                          .Include(u => u.UserTaskType)
-                                          .Include(u => u.ExecutorUser)
-                                          .OrderBy(t => propertyToOrder.GetValue(t, null)).Skip(from).Take(to - from).ToList();
-
-                    return Ok(new { data = modelTransformer.UserTasksToDTOModels(tasks).ToArray() });
-                }
-                else
-                {
-                    var tasks = repository.UserTask
-                                          .Include(u => u.Payload)
-                                          .Include(u => u.Priority)
-                                          .Include(u => u.TaskManagerUser)
-                                          .Include(u => u.UserTaskState)
-                                          .Include(u => u.UserTaskType)
-                                          .Include(u => u.ExecutorUser)
-                                          .OrderByDescending(t => propertyToOrder.GetValue(t, null)).Skip(from).Take(to - from).ToList();
-
-                    return Ok(new { data = modelTransformer.UserTasksToDTOModels(tasks).ToArray() });
-                }
-
+                var tasks = repository.GetOrderedAndFilteredTasks(from, to, orderBy, sortBy, filterBy, filterValue);
+                return Ok(new { data = modelTransformer.UserTasksToDTOModels(tasks).ToArray() });
             }
             catch (Exception ex)
             {
@@ -149,11 +84,38 @@ namespace CRM.Controllers
             }
         }
 
-
         [HttpGet()]
+        [Route("meta")]
+        [Authorize]
         public IActionResult Get()
         {
+            try
+            {
+                Dictionary<string, string> propsAndDisplayNames = new Dictionary<string, string>();
+                var bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
 
+                var userTaskProperties = typeof(DTOModels.UserTask).GetProperties(bindingFlags);
+                userTaskProperties = userTaskProperties.Where(ut => ut.CustomAttributes != null).ToArray();
+
+                if (userTaskProperties == null)
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "MetaData for user tasks not found!" });
+
+                foreach (var prop in userTaskProperties)
+                {
+                    var displayAttribute = prop.GetCustomAttributes(typeof(DisplayAttribute), true).Select(attr => (DisplayAttribute)attr).FirstOrDefault() as DisplayAttribute;
+                    if (displayAttribute == null)
+                        continue;
+
+                    propsAndDisplayNames.Add(string.Format("{0}{1}", prop.Name.Substring(0, 1).ToLower(), prop.Name.Substring(1)), displayAttribute.Name);
+                }
+
+                return Ok(new { data = propsAndDisplayNames.ToHashSet() });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ServerMessage.INTERNAL_SERVER_ERROR });
+            }
         }
 
         // POST: api/UserTask
@@ -168,11 +130,9 @@ namespace CRM.Controllers
                 var userTaskModel = modelTransformer.UserTaskDTOModelToModel(userTask);
 
                 if (userTask.Id <= 0)
-                    await repository.AddAsync(userTaskModel);
+                    await repository.SaveNewUserTask(userTaskModel);
                 else
-                    repository.Update(userTaskModel); 
-
-                await repository.SaveChangesAsync();
+                    await repository.UpdateUserTask(userTaskModel);
 
                 return Ok();
             }
@@ -183,6 +143,6 @@ namespace CRM.Controllers
             }
 
         }
- 
+
     }
 }
