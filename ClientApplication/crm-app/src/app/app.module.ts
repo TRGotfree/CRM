@@ -29,6 +29,7 @@ import { MenuComponent } from './menu/menu.component';
 import { DictionaryComponent } from './dictionary/dictionary.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { TaskComponent } from './task/task.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     MenuComponent,
     DictionaryComponent,
     SettingsComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    TaskComponent
   ],
   imports: [
     BrowserModule,

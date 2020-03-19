@@ -17,7 +17,6 @@ namespace CRM.DTOModels
         [Required]
         public int UserTaskTypeId { get; set; }
 
-        [Display(Name = "Описание")]
         public string Description { get; set; }
 
         [Display(Name = "Статус")]
@@ -48,7 +47,6 @@ namespace CRM.DTOModels
 
         public int? PayloadId { get; set; }
 
-        [Display(Name = "Файл")]
         public bool IsPayloadExists { get; set; }
     }
 }

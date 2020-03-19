@@ -32,7 +32,8 @@ namespace CRM.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] int numberOfRows)
+        [Route("new")]
+        public IActionResult GetNew([FromQuery]int numberOfRows)
         {
             try
             {

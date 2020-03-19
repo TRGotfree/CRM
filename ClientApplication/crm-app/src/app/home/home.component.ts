@@ -1,7 +1,6 @@
 // tslint:disable: prefer-for-of
 import {
   Component, OnInit, ChangeDetectionStrategy, ViewChild, AfterViewInit,
-  OnChanges,
   ChangeDetectorRef
 } from '@angular/core';
 import { MenuItem } from '../models/menuItem';
@@ -12,15 +11,15 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./home.component.css']
+  // ,
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent implements OnInit, OnChanges, AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit {
 
   showTasksTable = false;
   countOfTasks = 10;
@@ -43,14 +42,12 @@ export class HomeComponent implements OnInit, OnChanges, AfterViewInit {
       { title: 'Контакты', description: 'Список контактов', icon: 'contacts', link: '', imageLink: '' },
       { title: 'База знаний', description: 'Накопленные знания', icon: 'book', link: '', imageLink: '' },
     ];
-    this.loadTasksGridColumns();
     this.dataSource = new MatTableDataSource();
   }
 
-  ngOnChanges(): void {
-  }
-
   ngAfterViewInit(): void {
+    this.loadTasksGridColumns();
+    this.loadTasks(this.countOfTasks);
   }
 
   loadTasksGridColumns(): void {
@@ -71,7 +68,6 @@ export class HomeComponent implements OnInit, OnChanges, AfterViewInit {
         }
 
         this.showTasksTable = true;
-        this.changesDetector.markForCheck();
 
       } catch (error) {
         this.snackBar.open('Произошла ошибка во время получения метаданных по задачам!', 'OK', { duration: 3000 });
@@ -90,6 +86,7 @@ export class HomeComponent implements OnInit, OnChanges, AfterViewInit {
         //Добавить кнопку с возможностью указания кол-ва задач для загрузки
 
         this.dataSource = new MatTableDataSource(res.data);
+        this.dataSource.sort = this.sort;
       }, error => {
         this.snackBar.open('Произошла ошибка во время получения списка задач!', 'OK', { duration: 3000 });
       });

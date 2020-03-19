@@ -14,7 +14,7 @@ export class UserTaskService {
 
     getTasks(numberOfTasks: number): Observable<{data: any[]}> {
 
-        let url = '/usertask';
+        let url = '/usertask/new';
 
         if (!environment.production) {
             url = environment.devApiUrl + url;
