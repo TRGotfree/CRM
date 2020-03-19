@@ -6,6 +6,9 @@ import {
 import { UserTask } from '../models/userTask';
 import { UserTaskService } from '../services/userTask.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
+import { UserTaskType } from '../models/userTaskType';
 
 @Component({
     selector: 'app-task',
@@ -18,6 +21,8 @@ export class TaskComponent implements OnInit {
     constructor(private userTaskService: UserTaskService, private snackBar: MatSnackBar) {}
 
     @Input() userTask: UserTask;
+
+    taskTypes: UserTaskType[] = [];
 
     ngOnInit(): void {
 

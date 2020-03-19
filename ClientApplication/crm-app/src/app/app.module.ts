@@ -18,6 +18,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { TokenInterceptor } from './services/interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +31,7 @@ import { DictionaryComponent } from './dictionary/dictionary.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { TaskComponent } from './task/task.component';
+import { from } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,8 @@ import { TaskComponent } from './task/task.component';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
 

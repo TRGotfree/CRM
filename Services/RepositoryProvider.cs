@@ -91,6 +91,11 @@ namespace CRM.Services
             }
         }
 
+        public IEnumerable<Models.Priority> GetPriorities()
+        {
+            return repository.Priority.ToList();
+        }
+
         public User GetUser(string login, string password)
         {
             if (string.IsNullOrWhiteSpace(login))
@@ -104,48 +109,44 @@ namespace CRM.Services
 
         public UserTask[] GetUserTasks(int amountOfTasks)
         {
-           return repository.UserTask
-                     .Include(u => u.Payload)
-                     .Include(u => u.Priority)
-                     .Include(u => u.TaskManagerUser)
-                     .Include(u => u.UserTaskState)
-                     .Include(u => u.UserTaskType)
-                     .Include(u => u.ExecutorUser)
-                     .Where(ut => ut.UserTaskStateId == (int)UserTaskStates.New ||
-                            ut.UserTaskStateId == (int)UserTaskStates.Proceed).Take(amountOfTasks).ToArray();
+            return repository.UserTask
+                      .Include(u => u.Payload)
+                      .Include(u => u.Priority)
+                      .Include(u => u.TaskManagerUser)
+                      .Include(u => u.UserTaskState)
+                      .Include(u => u.UserTaskType)
+                      .Include(u => u.ExecutorUser)
+                      .Where(ut => ut.UserTaskStateId == (int)UserTaskStates.New ||
+                             ut.UserTaskStateId == (int)UserTaskStates.Proceed).Take(amountOfTasks).ToArray();
+        }
+
+        public IEnumerable<UserTaskState> GetUserTaskStates()
+        {
+            return repository.UserTaskState.ToList();
+        }
+
+        public IEnumerable<UserTaskType> GetUserTaskTypes()
+        {
+            return repository.UserTaskType.Where(ut => !ut.IsDeleted).ToList();
         }
 
         public async Task<UserTask> SaveNewUserTask(UserTask userTask)
         {
-            try
-            {
-                if (userTask == null)
-                    throw new ArgumentNullException(nameof(userTask));
+            if (userTask == null)
+                throw new ArgumentNullException(nameof(userTask));
 
-                var user = await repository.AddAsync(userTask);
-                await repository.SaveChangesAsync();
-                return user.Entity;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            var user = await repository.AddAsync(userTask);
+            await repository.SaveChangesAsync();
+            return user.Entity;
         }
 
         public async Task UpdateUserTask(UserTask userTask)
         {
-            try
-            {
-                if (userTask == null)
-                    throw new ArgumentNullException(nameof(userTask));
+            if (userTask == null)
+                throw new ArgumentNullException(nameof(userTask));
 
-                repository.Update(userTask);
-                await repository.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            repository.Update(userTask);
+            await repository.SaveChangesAsync();
         }
     }
 }

@@ -19,5 +19,11 @@ namespace CRM.Interfaces
         Task<UserTask> SaveNewUserTask(UserTask userTask);
 
         Task UpdateUserTask(UserTask userTask);
+
+        IEnumerable<UserTaskState> GetUserTaskStates();
+
+        IEnumerable<UserTaskType> GetUserTaskTypes();
+
+        IEnumerable<Priority> GetPriorities();
     }
 }

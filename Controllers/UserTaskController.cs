@@ -46,7 +46,6 @@ namespace CRM.Controllers
                     return Ok(new { data = newTasksInProcess });
 
                 return Ok(new { data = modelTransformer.UserTasksToDTOModels(newTasksInProcess).ToArray() });
-
             }
             catch (Exception ex)
             {
@@ -142,7 +141,6 @@ namespace CRM.Controllers
                 logger.LogError(ex);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ServerMessage.INTERNAL_SERVER_ERROR });
             }
-
         }
 
     }
