@@ -21,6 +21,7 @@ import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 import { TokenInterceptor } from './services/interceptor.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -69,12 +70,13 @@ import { TaskComponent } from './task/task.component';
     MatProgressSpinnerModule,
     MatDialogModule,
     MatSelectModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatMomentDateModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
 
   bootstrap: [AppComponent],
-
+  entryComponents: [ TaskComponent ],
   exports: [MenuComponent, ToolbarComponent]
 })
 export class AppModule { }

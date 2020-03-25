@@ -1,37 +1,59 @@
 <mat-dialog-content>
-  <mat-form-field>
-    <mat-label>Тип</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let taskType of taskTypes" [value]="taskType.name">{{userTask.userTaskType}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Описание</mat-label>
-    <textarea matInput placeholder="Добавьте описание..." [value]="userTask.description"></textarea>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Приоритет</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let prior of priorities" [value]="prior.name">{{userTask.priority}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Исполнитель</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let executorUser of executorUsers" [value]="executorUser.name">{{userTask.executorUser}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Дата завершения</mat-label>
-    <input matInput [matDatepicker]="datepicker" [value]="userTask.executeTaskUntilDate" />
-    <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-    <mat-datepicker #datepicker></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput type="file"/>
-  </mat-form-field>
+  <h3 id="caption">{{caption}}</h3>
+  <div class="dialog-container">
+    <div class="field-container">
+      <div class="task-type-container">
+        <mat-form-field>
+          <mat-label>Тип</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let taskType of taskTypes" [value]="taskType.name">{{userTask.userTaskType}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button type="button" mat-icon-button id="btn-add-task-type">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <mat-form-field id="priority-container">
+        <mat-label>Приоритет</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let prior of priorities" [value]="prior.name">{{prior.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="field-container">
+      <mat-form-field>
+        <mat-label>Исполнитель</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let executorUser of executorUsers" [value]="executorUser.name">
+            {{executorUser.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field id="date-field-container">
+        <mat-label>Дата завершения</mat-label>
+        <input matInput [matDatepicker]="datepicker" [value]="userTask.executeTaskUntilDate" />
+        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #datepicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="field-container">
+      <mat-form-field id="textarea-field">
+        <mat-label>Описание</mat-label>
+        <textarea rows="5" matInput placeholder="Добавьте описание..."></textarea>
+      </mat-form-field>
+    </div>
+
+    <input hidden type="file" #fileChoose />
+
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button type="button" mat-raised-button color="primary" (click)="save()">Сохранить</button>
-  <button type="button" mat-raised-button color="warn" (click)="cancel()">Отмена</button>
+  <div class="file-choose-container">
+    <button type="button" mat-stroked-button color="primary" (click)="fileChoose.click()">Прикрепить файл</button>
+  </div>
+  <div class="dialog-actions">
+    <button id="btn-save-task" type="button" mat-raised-button (click)="save()">Сохранить</button>
+    <button id="btn-cancel" type="button" mat-raised-button (click)="cancel()">Отмена</button>
+  </div>
 </mat-dialog-actions>

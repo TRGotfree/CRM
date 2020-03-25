@@ -1,0 +1,77 @@
+#caption {
+    color: #3F51B5;
+}
+
+.dialog-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+}
+
+.field-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.task-type-container {
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#btn-add-task-type {
+    color: #3F51B5;
+}
+
+#priority-container {
+    width: 50%;
+}
+
+#date-field-container {
+    width: 45%;
+}
+
+#textarea-field {
+    width: 100%;
+}
+
+mat-dialog-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.file-choose-container {
+    display: flex;
+    width: 50%;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.dialog-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 50%;
+}
+
+#btn-save-task {
+    background-color: #3F51B5;
+    color: white;
+}
+
+#btn-cancel {
+    background-color: white;
+    color: #BB3268;
+}

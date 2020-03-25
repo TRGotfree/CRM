@@ -1,4 +1,5 @@
 // tslint:disable: prefer-for-of
+// tslint:disable: align
 import {
   Component, OnInit, ChangeDetectionStrategy, ViewChild, AfterViewInit,
   ChangeDetectorRef
@@ -18,8 +19,6 @@ import { TaskComponent } from '../task/task.component';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
-  // ,
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
@@ -35,8 +34,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(private userTaskService: UserTaskService,
-              private snackBar: MatSnackBar,
-              private taskDialog: MatDialog) {
+    private snackBar: MatSnackBar,
+    public taskDialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -65,6 +64,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         const data = res.data;
         this.gridColumns = [];
         this.visibleGridColumns = [];
+
         for (let index = 0; index < data.length; index++) {
           const column = data[index];
           this.gridColumns.push({ prop: column.Key, header: column.Value });
@@ -100,13 +100,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   newTask(): void {
-    try {
-
-      this.taskDialog.open(TaskComponent, { width: '50%', data: {} });
-
-    } catch (error) {
-      this.snackBar.open('Произошла ошибка во время получения метаданных списка задач!', 'OK', { duration: 3000 });
-    }
+    this.taskDialog.open(TaskComponent, { width: '40%', height: '45%', data: {} });
   }
 
 }

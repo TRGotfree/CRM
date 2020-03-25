@@ -34,12 +34,9 @@ export class TaskComponent implements OnInit, AfterViewInit {
     taskTypes: UserTaskType[] = [];
     priorities: Priority[] = [];
     executorUsers: ExecutorUser[] = [];
+    caption = 'Новая задача';
 
     ngOnInit(): void {
-
-    }
-
-    ngAfterViewInit(): void {
         this.userTaskTypeService.getTaskTypes().subscribe(res => {
             if (!res || !res.data) {
                 this.snackBar.open('Произошла ошибка во время получения данных по типам задач!', 'OK', { duration: 3000 });
@@ -71,6 +68,10 @@ export class TaskComponent implements OnInit, AfterViewInit {
         }, error => {
             this.snackBar.open('Произошла ошибка во время получения данных по исполнителям задач!', 'OK', { duration: 3000 });
         });
+    }
+
+    ngAfterViewInit(): void {
+
     }
 
     save(): void {
