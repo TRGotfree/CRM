@@ -1,12 +1,17 @@
 // tslint:disable: prefer-for-of
+// tslint:disable: align
 import {
-    Component, OnInit, ChangeDetectionStrategy, ViewChild, AfterViewInit, Input,
-    ChangeDetectorRef
+    Component, OnInit, ChangeDetectionStrategy, Inject, AfterViewInit
 } from '@angular/core';
 import { UserTask } from '../models/userTask';
+import { Priority } from '../models/priority';
+import { ExecutorUser } from '../models/executorUser';
 import { UserTaskService } from '../services/userTask.service';
+import { UserTaskTypeService } from '../services/userTaskType.service';
+import { PriorityService } from '../services/priority.service';
+import { UserService } from '../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { UserTaskType } from '../models/userTaskType';
 
@@ -16,15 +21,63 @@ import { UserTaskType } from '../models/userTaskType';
     styleUrls: ['./task.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TaskComponent implements OnInit {
+export class TaskComponent implements OnInit, AfterViewInit {
 
-    constructor(private userTaskService: UserTaskService, private snackBar: MatSnackBar) {}
-
-    @Input() userTask: UserTask;
+    constructor(public dialogRef: MatDialogRef<TaskComponent>,
+        @Inject(MAT_DIALOG_DATA) public userTask: UserTask,
+        private userTaskService: UserTaskService,
+        private userTaskTypeService: UserTaskTypeService,
+        private priorityService: PriorityService,
+        private userService: UserService,
+        private snackBar: MatSnackBar) { }
 
     taskTypes: UserTaskType[] = [];
+    priorities: Priority[] = [];
+    executorUsers: ExecutorUser[] = [];
 
     ngOnInit(): void {
 
+    }
+
+    ngAfterViewInit(): void {
+        this.userTaskTypeService.getTaskTypes().subscribe(res => {
+            if (!res || !res.data) {
+                this.snackBar.open('Произошла ошибка во время получения данных по типам задач!', 'OK', { duration: 3000 });
+                return;
+            }
+            this.taskTypes = res.data;
+        }, error => {
+            this.snackBar.open('Произошла ошибка во время получения данных по типам задач!', 'OK', { duration: 3000 });
+        });
+
+        this.priorityService.getPriorities().subscribe(res => {
+            if (!res || !res.data) {
+                this.snackBar.open('Произошла ошибка во время получения данных по приоритетам задач!', 'OK', { duration: 3000 });
+                return;
+            }
+
+            this.priorities = res.data;
+        }, error => {
+            this.snackBar.open('Произошла ошибка во время получения данных по приоритетам задач!', 'OK', { duration: 3000 });
+        });
+
+        this.userService.getExecutorUsers().subscribe(res => {
+            if (!res || !res.data) {
+                this.snackBar.open('Произошла ошибка во время получения данных по исполнителям задач!', 'OK', { duration: 3000 });
+                return;
+            }
+
+            this.executorUsers = res.data;
+        }, error => {
+            this.snackBar.open('Произошла ошибка во время получения данных по исполнителям задач!', 'OK', { duration: 3000 });
+        });
+    }
+
+    save(): void {
+        this.userTaskService.saveTask(this.userTask);
+    }
+
+    cancel(): void {
+        this.dialogRef.close();
     }
 }

@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
-import { UserTaskState } from '../models/userTaskState';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ExecutorUser } from '../models/executorUser';
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class UserTaskStateService {
+export class UserService {
     constructor(private http: HttpClient) { }
 
-    getTaskStates(): Observable<{ data: UserTaskState[] }> {
+    getExecutorUsers(): Observable<{ data: ExecutorUser[] }> {
 
-        let url = '/usertaskstate';
+        let url = '/user/executor';
 
         if (!environment.production) {
             url = environment.devApiUrl + url;
         }
 
-        return this.http.get(url) as Observable<{ data: UserTaskState[] }>;
+        return this.http.get(url) as Observable<{ data: ExecutorUser[] }>;
     }
 }

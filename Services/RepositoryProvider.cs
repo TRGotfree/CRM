@@ -21,6 +21,13 @@ namespace CRM.Services
             this.repository = repositoryContext ?? throw new ArgumentNullException(nameof(repositoryContext));
         }
 
+        public IEnumerable<ExecutorUser> GetExecutorUsers()
+        {
+            return repository.User
+               .Where(us => us.IsActive)
+               .Select(u => new ExecutorUser { Id = u.Id, Name = u.Name });
+        }
+
         public IEnumerable<UserTask> GetOrderedAndFilteredTasks(int from, int to, string orderBy, string sortBy, string filterBy, string filterValue)
         {
             try

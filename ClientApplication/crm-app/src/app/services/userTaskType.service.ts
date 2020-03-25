@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class UserTaskTypeService {
     constructor(private http: HttpClient) { }
 
-    getPriorities(): Observable<{ data: UserTaskType[] }> {
+    getTaskTypes(): Observable<{ data: UserTaskType[] }> {
 
         let url = '/usertasktype';
 

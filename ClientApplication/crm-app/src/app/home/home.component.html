@@ -22,7 +22,7 @@
   </mat-grid-list>
   <div id="user-tasks-caption" *ngIf="showTasksTable">
     <h3>Новые и исполняемые задачи</h3>
-    <button type="button" mat-raised-button><i class="material-icons">add</i>Новая задача</button>
+    <button type="button" mat-raised-button (click)="newTask()"><i class="material-icons">add</i>Новая задача</button>
   </div>
   <div class="spinner-container" *ngIf="!showTasksTable">
     <mat-spinner></mat-spinner>

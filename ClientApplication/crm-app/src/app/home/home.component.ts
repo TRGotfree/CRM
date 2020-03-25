@@ -11,6 +11,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskComponent } from '../task/task.component';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +34,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  constructor(private userTaskService: UserTaskService, private snackBar: MatSnackBar, private changesDetector: ChangeDetectorRef) {
+  constructor(private userTaskService: UserTaskService,
+              private snackBar: MatSnackBar,
+              private taskDialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -90,10 +94,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }, error => {
         this.snackBar.open('Произошла ошибка во время получения списка задач!', 'OK', { duration: 3000 });
       });
+    } catch (error) {
+      this.snackBar.open('Произошла ошибка во время получения метаданных списка задач!', 'OK', { duration: 3000 });
+    }
+  }
 
+  newTask(): void {
+    try {
+
+      this.taskDialog.open(TaskComponent, { width: '50%', data: {} });
 
     } catch (error) {
       this.snackBar.open('Произошла ошибка во время получения метаданных списка задач!', 'OK', { duration: 3000 });
     }
   }
+
 }

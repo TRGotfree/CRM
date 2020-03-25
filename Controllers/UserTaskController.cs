@@ -17,7 +17,7 @@ namespace CRM.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-
+    [Authorize]
     public class UserTaskController : ControllerBase
     {
         private readonly ICustomLogger logger;

@@ -60,4 +60,14 @@ export class UserTaskService {
 
         return this.http.get(url) as Observable<{data: any[]}>;
     }
+
+    saveTask(userTask: UserTask): void {
+        let url = '/usertask';
+
+        if (!environment.production) {
+            url = environment.devApiUrl + url;
+        }
+
+        this.http.post(url, userTask);
+    }
 }

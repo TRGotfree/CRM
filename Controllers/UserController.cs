@@ -12,23 +12,24 @@ namespace CRM.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UserTaskStateController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IRepository repository;
         private readonly ICustomLogger logger;
 
-        public UserTaskStateController(IRepository repository, ICustomLogger logger)
+        public UserController(IRepository repository, ICustomLogger logger)
         {
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
-        public IActionResult Get()
+        [Route("executor")]
+        public IActionResult GetExecutor()
         {
             try
             {
-                return Ok(new { data = repository.GetUserTaskStates().ToArray() });
+                return Ok(new { data = repository.GetExecutorUsers().ToArray() });
             }
             catch (Exception ex)
             {
