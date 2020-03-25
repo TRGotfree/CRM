@@ -21,4 +21,19 @@ export class UserTaskTypeService {
 
         return this.http.get(url) as Observable<{ data: UserTaskType[] }>;
     }
+
+    saveTaskTypeService(userTaskType: UserTaskType): void {
+
+        if (!userTaskType) {
+            throw new Error('Input parameter couldn\'t be null or undefined!');
+        }
+
+        let url = '/usertasktype';
+
+        if (!environment.production) {
+            url = environment.devApiUrl + url;
+        }
+
+        this.http.post(url, userTaskType);
+    }
 }

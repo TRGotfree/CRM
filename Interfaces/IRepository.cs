@@ -24,6 +24,8 @@ namespace CRM.Interfaces
 
         IEnumerable<UserTaskType> GetUserTaskTypes();
 
+        Task SaveUserTaskType(UserTaskType userTaskType);
+
         IEnumerable<Priority> GetPriorities();
 
         IEnumerable<ExecutorUser> GetExecutorUsers();

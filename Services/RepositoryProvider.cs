@@ -147,6 +147,19 @@ namespace CRM.Services
             return user.Entity;
         }
 
+        public async Task SaveUserTaskType(UserTaskType userTaskType)
+        {
+            if (userTaskType == null)
+                throw new ArgumentNullException(nameof(userTaskType));
+
+            if (userTaskType.Id <= 0)
+                await repository.UserTaskType.AddAsync(userTaskType);
+            else
+                repository.UserTaskType.Update(userTaskType);
+
+            await repository.SaveChangesAsync();
+        }
+
         public async Task UpdateUserTask(UserTask userTask)
         {
             if (userTask == null)

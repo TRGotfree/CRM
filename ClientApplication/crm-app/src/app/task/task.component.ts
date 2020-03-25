@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { UserTaskType } from '../models/userTaskType';
+import { UserTaskTypeComponent } from '../usertasktype/usertasktype.component';
 
 @Component({
     selector: 'app-task',
@@ -25,6 +26,7 @@ export class TaskComponent implements OnInit, AfterViewInit {
 
     constructor(public dialogRef: MatDialogRef<TaskComponent>,
         @Inject(MAT_DIALOG_DATA) public userTask: UserTask,
+        public userTaskTypeDialog: MatDialog,
         private userTaskService: UserTaskService,
         private userTaskTypeService: UserTaskTypeService,
         private priorityService: PriorityService,
@@ -72,6 +74,16 @@ export class TaskComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
 
+    }
+
+    addTaskType(): void {
+        const taskTypeDialog = this.userTaskTypeDialog.open(UserTaskTypeComponent, { width: '30%', height: '25%', data: {} });
+        taskTypeDialog.afterClosed().subscribe(newTaskType => {
+            if (!newTaskType) {
+                return;
+            }
+
+        });
     }
 
     save(): void {

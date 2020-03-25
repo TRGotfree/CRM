@@ -1,0 +1,18 @@
+<mat-dialog-content>
+  <h3 id="caption">{{caption}}</h3>
+  <div class="dialog-container">
+    <div class="field-container">
+      <mat-form-field id="textarea-field">
+        <mat-label>Название типа задачи</mat-label>
+        <input matInput placeholder="Добавьте название..." [(ngModel)]="userTaskType.name">
+        <button mat-button *ngIf="userTaskType.name" matSuffix mat-icon-button aria-label="Очистить" (click)="userTaskType.name=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button id="btn-save-task" type="button" mat-raised-button (click)="save()">Сохранить</button>
+  <button id="btn-cancel" type="button" mat-raised-button (click)="cancel()">Отмена</button>
+</mat-dialog-actions>

@@ -34,7 +34,7 @@ import { DictionaryComponent } from './dictionary/dictionary.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { TaskComponent } from './task/task.component';
-
+import { UserTaskTypeComponent } from './usertasktype/usertasktype.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +46,8 @@ import { TaskComponent } from './task/task.component';
     DictionaryComponent,
     SettingsComponent,
     ToolbarComponent,
-    TaskComponent
+    TaskComponent,
+    UserTaskTypeComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +77,7 @@ import { TaskComponent } from './task/task.component';
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
 
   bootstrap: [AppComponent],
-  entryComponents: [ TaskComponent ],
+  entryComponents: [ TaskComponent, UserTaskTypeComponent ],
   exports: [MenuComponent, ToolbarComponent]
 })
 export class AppModule { }
