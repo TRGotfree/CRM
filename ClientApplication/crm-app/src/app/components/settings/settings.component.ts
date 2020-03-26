@@ -1,7 +1,7 @@
 // tslint:disable: max-line-length
 
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from '../models/menuItem';
+import { MenuItem } from '../../models/menuItem';
 
 @Component({
   templateUrl: './settings.component.html',

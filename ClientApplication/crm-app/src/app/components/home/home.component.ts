@@ -4,12 +4,12 @@ import {
   Component, OnInit, ChangeDetectionStrategy, ViewChild, AfterViewInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { MenuItem } from '../models/menuItem';
-import { UserTask } from '../models/userTask';
-import { UserTaskService } from '../services/userTask.service';
-import { UserTaskMeta } from '../models/userTaskMeta';
+import { MenuItem } from '../../models/menuItem';
+import { UserTask } from '../../models/userTask';
+import { UserTaskService } from '../../services/userTask.service';
+import { UserTaskMeta } from '../../models/userTaskMeta';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,13 +25,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   showTasksTable = false;
   countOfTasks = 10;
   menuItems: MenuItem[];
-  dataSource: MatTableDataSource<UserTask[]>;
+  dataSource = new MatTableDataSource([]);
   gridColumns: UserTaskMeta[];
-
+  tasksCount = 0;
   visibleGridColumns: string[];
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginatorIntl, { static: false }) matPaginatorIntl: MatPaginatorIntl;
 
   constructor(private userTaskService: UserTaskService,
     private snackBar: MatSnackBar,
@@ -45,12 +46,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       { title: 'Контакты', description: 'Список контактов', icon: 'contacts', link: '', imageLink: '' },
       { title: 'База знаний', description: 'Накопленные знания', icon: 'book', link: '', imageLink: '' },
     ];
-    this.dataSource = new MatTableDataSource();
+    this.loadTasksGridColumns();
+    this.loadTasks(this.countOfTasks);
   }
 
   ngAfterViewInit(): void {
-    this.loadTasksGridColumns();
-    this.loadTasks(this.countOfTasks);
   }
 
   loadTasksGridColumns(): void {
@@ -72,7 +72,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
 
         this.showTasksTable = true;
-
       } catch (error) {
         this.snackBar.open('Произошла ошибка во время получения метаданных по задачам!', 'OK', { duration: 3000 });
       }
@@ -90,7 +89,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         //Добавить кнопку с возможностью указания кол-ва задач для загрузки
 
         this.dataSource = new MatTableDataSource(res.data);
+        this.tasksCount = res.data[0] ? res.data[0].totalCountOfTasks : 0;
         this.dataSource.sort = this.sort;
+
+        this.dataSource.paginator = this.paginator;
+
       }, error => {
         this.snackBar.open('Произошла ошибка во время получения списка задач!', 'OK', { duration: 3000 });
       });
@@ -100,7 +103,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   newTask(): void {
-    this.taskDialog.open(TaskComponent, { width: '40%', height: '45%', data: {} });
+    const newTaskDialog = this.taskDialog.open(TaskComponent, { width: '40%', height: '45%', data: {} });
+    newTaskDialog.afterClosed().subscribe(newTaskData => {
+      if (!newTaskData) {
+        return;
+      }
+
+    }, error => {
+
+    });
   }
 
 }

@@ -1,5 +1,5 @@
 import { Input, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { MenuItem } from '../models/menuItem';
+import { MenuItem } from '../../models/menuItem';
 
 @Component({
   selector: 'app-toolbar',

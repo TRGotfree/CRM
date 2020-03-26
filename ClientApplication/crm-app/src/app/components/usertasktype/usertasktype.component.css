@@ -19,9 +19,23 @@
     width: 100%;
 }
 
+#input-field {
+    width: 100%;
+}
+
 mat-dialog-actions {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     width: 100%;
+}
+
+#btn-save-task-type {
+    background-color: #3F51B5;
+    color: white;
+}
+
+#btn-cancel {
+    background-color: white;
+    color: #BB3268;
 }

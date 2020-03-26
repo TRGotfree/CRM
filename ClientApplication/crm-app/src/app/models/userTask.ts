@@ -9,8 +9,7 @@ export interface UserTask {
     priorityId: number;
     executorUser: string;
     executorUserId: number;
-    taskManagerUser: string;
-    taskManagerUserId: number;
+    taskManagerUserLogin: string;
     executeTaskUntilDate: string;
     payloadId: number;
     isPayloadExists: boolean;

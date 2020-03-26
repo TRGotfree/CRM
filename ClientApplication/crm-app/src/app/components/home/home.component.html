@@ -18,7 +18,6 @@
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
-
   </mat-grid-list>
   <div id="user-tasks-caption" *ngIf="showTasksTable">
     <h3>Новые и исполняемые задачи</h3>
@@ -28,13 +27,13 @@
     <mat-spinner></mat-spinner>
   </div>
   <!-- TO-DO: Добавить детали для каждой строки в которой будет описание задачи и возможность скачать прикрепленный файл -->
-  <mat-table *ngIf="showTasksTable" class="mat-elevation-z8" id="user-tasks" [dataSource]="dataSource" matSort
-    matSortActive="created" matSortDisableClear matSortDirection="desc">
+  <mat-table matSort [hidden]="!showTasksTable" class="mat-elevation-z8" id="user-tasks" [dataSource]="dataSource">
     <ng-container *ngFor="let gridColumn of gridColumns" [matColumnDef]="gridColumn.prop">
-      <mat-header-cell *matHeaderCellDef>{{gridColumn.header}}</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>{{gridColumn.header}}</mat-header-cell>
       <mat-cell *matCellDef="let userTask">{{userTask[gridColumn.prop]}}</mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="visibleGridColumns"></mat-header-row>
     <mat-row *matRowDef="let userTask; columns: visibleGridColumns;"></mat-row>
   </mat-table>
+  <mat-paginator [length]="tasksCount" [pageSize]="30"></mat-paginator>
 </app-menu>

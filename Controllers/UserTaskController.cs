@@ -128,13 +128,15 @@ namespace CRM.Controllers
                     return BadRequest(new { message = "Data is not valid" });
 
                 var userTaskModel = modelTransformer.UserTaskDTOModelToModel(userTask);
+                var user = repository.GetUser(userTask.TaskManagerUserLogin);
+                userTaskModel.TaskManagerUser = user;
 
                 if (userTask.Id <= 0)
-                    await repository.SaveNewUserTask(userTaskModel);
+                   userTaskModel = await repository.SaveNewUserTask(userTaskModel);
                 else
                     await repository.UpdateUserTask(userTaskModel);
 
-                return Ok();
+                return Ok(new { data = modelTransformer.UserTaskToDTOModel(userTaskModel) });
             }
             catch (Exception ex)
             {

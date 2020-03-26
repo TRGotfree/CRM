@@ -114,6 +114,14 @@ namespace CRM.Services
             return repository.User.Include(u => u.UserRole).FirstOrDefault(u => u.Login == login && u.Password == password);
         }
 
+        public User GetUser(string login)
+        {
+            if (string.IsNullOrWhiteSpace(login))
+                throw new ArgumentNullException(nameof(login));
+
+            return repository.User.FirstOrDefault(u => u.Login == login);
+        }
+
         public UserTask[] GetUserTasks(int amountOfTasks)
         {
             return repository.UserTask
@@ -142,22 +150,26 @@ namespace CRM.Services
             if (userTask == null)
                 throw new ArgumentNullException(nameof(userTask));
 
-            var user = await repository.AddAsync(userTask);
+            await repository.AddAsync(userTask);
             await repository.SaveChangesAsync();
-            return user.Entity;
+            return userTask;
         }
 
-        public async Task SaveUserTaskType(UserTaskType userTaskType)
+        public async Task<UserTaskType> SaveUserTaskType(UserTaskType userTaskType)
         {
             if (userTaskType == null)
                 throw new ArgumentNullException(nameof(userTaskType));
 
             if (userTaskType.Id <= 0)
-                await repository.UserTaskType.AddAsync(userTaskType);
+            {
+                userTaskType = new UserTaskType { Name = userTaskType.Name };
+                await repository.UserTaskType.AddAsync(userTaskType); 
+            }
             else
                 repository.UserTaskType.Update(userTaskType);
 
             await repository.SaveChangesAsync();
+            return userTaskType;
         }
 
         public async Task UpdateUserTask(UserTask userTask)

@@ -39,15 +39,14 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(UserTaskType userTaskType)
+        public async Task<IActionResult> Post([FromBody]UserTaskType userTaskType)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(Constants.ServerMessage.BAD_REQUEST);
 
-                await repository.SaveUserTaskType(userTaskType);
-                return Ok();
+                return Ok(new { data = await repository.SaveUserTaskType(userTaskType) });
             }
             catch (Exception ex)
             {

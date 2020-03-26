@@ -53,6 +53,7 @@ namespace CRM.Services
                 Id = (ulong)userTaskModel.Id,
                 Description = userTaskModel.Description,
                 ExecuteTaskUntilDate = userTaskModel.ExecuteTaskUntilDate,
+                ExecuteTaskUntilDateString = userTaskModel.ExecuteTaskUntilDate.ToString("dd.MM.yyyy"),
                 ExecutorUser = userTaskModel.ExecutorUser?.Name,
                 ExecutorUserId = userTaskModel.ExecutorUserId,
                 PayloadId = userTaskModel.PayloadId,

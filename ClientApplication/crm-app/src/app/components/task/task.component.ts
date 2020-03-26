@@ -3,24 +3,25 @@
 import {
     Component, OnInit, ChangeDetectionStrategy, Inject, AfterViewInit
 } from '@angular/core';
-import { UserTask } from '../models/userTask';
-import { Priority } from '../models/priority';
-import { ExecutorUser } from '../models/executorUser';
-import { UserTaskService } from '../services/userTask.service';
-import { UserTaskTypeService } from '../services/userTaskType.service';
-import { PriorityService } from '../services/priority.service';
-import { UserService } from '../services/user.service';
+
+import { UserTask } from '../../models/userTask';
+import { Priority } from '../../models/priority';
+import { ExecutorUser } from '../../models/executorUser';
+import { UserTaskService } from '../../services/userTask.service';
+import { UserTaskTypeService } from '../../services/userTaskType.service';
+import { PriorityService } from '../../services/priority.service';
+import { UserService } from '../../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
-import { UserTaskType } from '../models/userTaskType';
+import { FormControl, Validators } from '@angular/forms';
+import { UserTaskType } from '../../models/userTaskType';
 import { UserTaskTypeComponent } from '../usertasktype/usertasktype.component';
+import { User } from '../../models/user';
 
 @Component({
     selector: 'app-task',
     templateUrl: './task.component.html',
-    styleUrls: ['./task.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./task.component.css']
 })
 export class TaskComponent implements OnInit, AfterViewInit {
 
@@ -37,6 +38,10 @@ export class TaskComponent implements OnInit, AfterViewInit {
     priorities: Priority[] = [];
     executorUsers: ExecutorUser[] = [];
     caption = 'Новая задача';
+    taskTypeControl = new FormControl('', [Validators.required]);
+    priorityControl = new FormControl('', [Validators.required]);
+    executorUserControl = new FormControl('', [Validators.required]);
+    executionDateControl = new FormControl('', [Validators.required]);
 
     ngOnInit(): void {
         this.userTaskTypeService.getTaskTypes().subscribe(res => {
@@ -82,12 +87,33 @@ export class TaskComponent implements OnInit, AfterViewInit {
             if (!newTaskType) {
                 return;
             }
-
+            this.taskTypes.push(newTaskType);
         });
     }
 
     save(): void {
-        this.userTaskService.saveTask(this.userTask);
+        if (!this.userTask) { return; }
+
+        this.userTask.executeTaskUntilDate = this.executionDateControl.value.format();
+
+        const currentUser = JSON.parse(sessionStorage.getItem('user')) as User;
+        if (!currentUser) {
+            this.snackBar.open('Не удалось сохранить задачу! Не удается получить текущего пользователя!', 'OK', { duration: 3000 });
+            return;
+        }
+
+        this.userTask.taskManagerUserLogin = currentUser.login;
+
+        this.userTaskService.saveTask(this.userTask).subscribe(res => {
+            if (!res || !res.data) {
+                this.snackBar.open('Не удалось сохранить задачу!', 'OK', { duration: 3000 });
+                return;
+            }
+
+            this.dialogRef.close(res.data);
+        }, error => {
+            this.snackBar.open('Не удалось сохранить задачу!', 'OK', { duration: 3000 });
+        });
     }
 
     cancel(): void {

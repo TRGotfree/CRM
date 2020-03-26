@@ -1,0 +1,62 @@
+<mat-dialog-content>
+  <h3 id="caption">{{caption}}</h3>
+    <div class="dialog-container">
+      <div class="field-container">
+        <div class="task-type-container">
+          <mat-form-field>
+            <mat-label>Тип</mat-label>
+            <mat-select [formControl]="taskTypeControl" [(value)]="userTask.userTaskTypeId" required>
+              <mat-option *ngFor="let taskType of taskTypes" [value]="taskType.id">{{taskType.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="taskTypeControl.hasError('required')">Выберите тип задачи!</mat-error>
+          </mat-form-field>
+          <button type="button" mat-icon-button id="btn-add-task-type" (click)="addTaskType()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <mat-form-field id="priority-container">
+          <mat-label>Приоритет</mat-label>
+          <mat-select [formControl]="priorityControl" [(value)]="userTask.priorityId" required>
+            <mat-option *ngFor="let prior of priorities" [value]="prior.id">{{prior.name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="priorityControl.hasError('required')">Выберите приоритет задачи!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field-container">
+        <mat-form-field>
+          <mat-label>Исполнитель</mat-label>
+          <mat-select [formControl]="executorUserControl" [(value)]="userTask.executorUserId" required>
+            <mat-option *ngFor="let executorUser of executorUsers" [value]="executorUser.id">
+              {{executorUser.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="executorUserControl.hasError('required')">Выберите исполнителя задачи!</mat-error>
+        </mat-form-field>
+        <mat-form-field id="date-field-container">
+          <mat-label>Дата завершения</mat-label>
+          <input [formControl]="executionDateControl" matInput [matDatepicker]="datepicker" required/>
+          <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+          <mat-datepicker #datepicker></mat-datepicker>
+          <mat-error *ngIf="executionDateControl.hasError('required')">Укажите дату завершения задачи!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field-container">
+        <mat-form-field id="textarea-field">
+          <mat-label>Описание</mat-label>
+          <textarea rows="5" [(ngModel)]="userTask.description" matInput placeholder="Добавьте описание..."></textarea>
+        </mat-form-field>
+      </div>
+
+      <input hidden type="file" #fileChoose />
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="file-choose-container">
+    <button type="button" mat-stroked-button color="primary" (click)="fileChoose.click()">Прикрепить файл</button>
+  </div>
+  <div class="dialog-actions">
+    <button id="btn-save-task" type="button" mat-raised-button (click)="save()" [disabled]="!userTask.userTaskTypeId || !userTask.executeTaskUntilDate || !userTask.executorUserId || !userTask.priorityId">Сохранить</button>
+    <button id="btn-cancel" type="button" mat-raised-button (click)="cancel()">Отмена</button>
+  </div>
+</mat-dialog-actions>

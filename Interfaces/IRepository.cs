@@ -10,6 +10,8 @@ namespace CRM.Interfaces
     {
         User GetUser(string login, string password);
 
+        User GetUser(string login);
+
         UserTask[] GetUserTasks(int amountOfTasks);
 
         IEnumerable<UserTask> GetOrderedAndFilteredTasks(int from, int to,
@@ -24,7 +26,7 @@ namespace CRM.Interfaces
 
         IEnumerable<UserTaskType> GetUserTaskTypes();
 
-        Task SaveUserTaskType(UserTaskType userTaskType);
+        Task<UserTaskType> SaveUserTaskType(UserTaskType userTaskType);
 
         IEnumerable<Priority> GetPriorities();
 

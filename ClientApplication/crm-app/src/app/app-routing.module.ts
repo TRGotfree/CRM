@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthComponent } from './auth/auth.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { HomeComponent } from './home/home.component';
-import { SettingsComponent } from './settings/settings.component';
-import { DictionaryComponent } from './dictionary/dictionary.component';
+import { AuthComponent } from './components/auth/auth.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { HomeComponent } from './components/home/home.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { DictionaryComponent } from './components/dictionary/dictionary.component';
 
 const routes: Routes = [
   { path: '', component: AuthComponent },

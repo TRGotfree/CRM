@@ -1,13 +1,14 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { MenuItem } from '../models/menuItem';
-import { User } from '../models/user';
+import { MenuItem } from '../../models/menuItem';
+import { User } from '../../models/user';
 import { Router } from '@angular/router';
-import { HomeComponent } from '../components/home/home.component';
+import { HomeComponent } from '../home/home.component';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  styleUrls: ['./menu.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuComponent implements OnInit {
 
