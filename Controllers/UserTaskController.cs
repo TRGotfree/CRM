@@ -45,7 +45,7 @@ namespace CRM.Controllers
                 if (newTasksInProcess == null || newTasksInProcess.Length == 0)
                     return Ok(new { data = newTasksInProcess });
 
-                return Ok(new { data = modelTransformer.UserTasksToDTOModels(newTasksInProcess).ToArray() });
+                return Ok(new { data = modelTransformer.UserTasksToDTOModels(newTasksInProcess).ToArray(), total = newTasksInProcess.Length });
             }
             catch (Exception ex)
             {
@@ -75,7 +75,7 @@ namespace CRM.Controllers
                     return BadRequest(new { message = "sortBy parameter not specified!" });
 
                 var tasks = repository.GetOrderedAndFilteredTasks(from, to, orderBy, sortBy, filterBy, filterValue);
-                return Ok(new { data = modelTransformer.UserTasksToDTOModels(tasks).ToArray() });
+                return Ok(new { data = modelTransformer.UserTasksToDTOModels(tasks).ToArray(), total = tasks.Count() });
             }
             catch (Exception ex)
             {

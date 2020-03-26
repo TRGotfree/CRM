@@ -17,7 +17,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -42,7 +42,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { TaskComponent } from './components/task/task.component';
 import { UserTaskTypeComponent } from './components/usertasktype/usertasktype.component';
-
+import { MatPaginatorIntlRu } from './components/matpaginatorintl/matpaginatorint.class';
 
 @NgModule({
   declarations: [
@@ -102,6 +102,9 @@ import { UserTaskTypeComponent } from './components/usertasktype/usertasktype.co
           monthYearA11yLabel: 'MMMM YYYY',
         },
       }
+    },
+    {
+      provide: MatPaginatorIntl, useClass: MatPaginatorIntlRu
     },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
 

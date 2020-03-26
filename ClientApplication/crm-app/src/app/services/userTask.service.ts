@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class UserTaskService {
     constructor(private http: HttpClient) { }
 
-    getTasks(numberOfTasks: number): Observable<{data: any[]}> {
+    getTasks(numberOfTasks: number): Observable<{data: any[], total: number}> {
 
         let url = '/usertask/new';
 
@@ -23,11 +23,12 @@ export class UserTaskService {
         const httpParams = new HttpParams()
             .set('numberOfRows', numberOfTasks.toString());
 
-        return this.http.get(url, { params: httpParams }) as Observable<{data: any[]}>;
+        return this.http.get(url, { params: httpParams }) as Observable<{data: any[], total: number}>;
     }
 
     getSortedOrFilteredTasks(from: number, to: number,
-                             orderBy: string, sortBy: string, filterBy: string, filterValue: string): Observable<any> {
+                             orderBy: string, sortBy: string,
+                             filterBy: string, filterValue: string): Observable<{data: any[], total: number}> {
         try {
 
             let url = '/usertask';
@@ -44,7 +45,7 @@ export class UserTaskService {
                 .set('filterBy', filterBy)
                 .set('filterValue', filterValue);
 
-            return this.http.get(url, { params: httpParams });
+            return this.http.get(url, { params: httpParams }) as Observable<{data: any[], total: number}>;
 
         } catch (error) {
             throw error;

@@ -35,5 +35,5 @@
     <mat-header-row *matHeaderRowDef="visibleGridColumns"></mat-header-row>
     <mat-row *matRowDef="let userTask; columns: visibleGridColumns;"></mat-row>
   </mat-table>
-  <mat-paginator [length]="tasksCount" [pageSize]="30"></mat-paginator>
+  <mat-paginator class="mat-elevation-z8" [length]="tasksCount" [pageSize]="30"></mat-paginator>
 </app-menu>

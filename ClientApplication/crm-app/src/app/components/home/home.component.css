@@ -96,6 +96,10 @@ mat-cell{
    font-size: 14px;
 }
 
+mat-row:hover {
+  background-color: rgb(234, 237, 255);
+}
+
 #user-tasks-caption {
   width: 100%;
   display: flex;
@@ -112,7 +116,7 @@ mat-cell{
 
 #user-tasks-caption > button {
   margin-right: 10pt;
-  background-color: #FFD740;;
+  background-color: #FFD740;
   color: black;
 }
 
@@ -132,4 +136,6 @@ mat-cell{
 mat-paginator {
   color: #3F51B5;
   font-size: 16px;
+  margin-left: 10pt;
+  margin-right: 10pt;
 }

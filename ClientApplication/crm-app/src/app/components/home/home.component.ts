@@ -1,11 +1,9 @@
 // tslint:disable: prefer-for-of
 // tslint:disable: align
 import {
-  Component, OnInit, ChangeDetectionStrategy, ViewChild, AfterViewInit,
-  ChangeDetectorRef
+  Component, OnInit, ViewChild, AfterViewInit
 } from '@angular/core';
 import { MenuItem } from '../../models/menuItem';
-import { UserTask } from '../../models/userTask';
 import { UserTaskService } from '../../services/userTask.service';
 import { UserTaskMeta } from '../../models/userTaskMeta';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,6 +12,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskComponent } from '../task/task.component';
+import { merge, Observable, of as observableOf } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { UserTask } from 'src/app/models/userTask';
 
 @Component({
   selector: 'app-home',
@@ -46,11 +47,34 @@ export class HomeComponent implements OnInit, AfterViewInit {
       { title: 'Контакты', description: 'Список контактов', icon: 'contacts', link: '', imageLink: '' },
       { title: 'База знаний', description: 'Накопленные знания', icon: 'book', link: '', imageLink: '' },
     ];
-    this.loadTasksGridColumns();
-    this.loadTasks(this.countOfTasks);
+
   }
 
   ngAfterViewInit(): void {
+    this.loadTasksGridColumns();
+    this.loadTasks(this.countOfTasks);
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          //TO-DO: Продолжить здесь, необходимо получить отсортированный массив задач относительно индекса страницы
+          this.showTasksTable = false;
+          return this.userTaskService.getSortedOrFilteredTasks()
+        }),
+        map(res => {
+
+          return res.data;
+         }),
+      catchError(() => {
+        this.showTasksTable = true;
+        return observableOf([]);
+      }))
+      .subscribe(res => {
+
+      }, error => {
+
+      });
   }
 
   loadTasksGridColumns(): void {
@@ -89,7 +113,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         //Добавить кнопку с возможностью указания кол-ва задач для загрузки
 
         this.dataSource = new MatTableDataSource(res.data);
-        this.tasksCount = res.data[0] ? res.data[0].totalCountOfTasks : 0;
+        this.tasksCount = res.total ? res.total : 0;
         this.dataSource.sort = this.sort;
 
         this.dataSource.paginator = this.paginator;
