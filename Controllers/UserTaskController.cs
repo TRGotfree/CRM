@@ -33,14 +33,22 @@ namespace CRM.Controllers
 
         [HttpGet]
         [Route("new")]
-        public IActionResult GetNew([FromQuery]int numberOfRows)
+        public async Task<IActionResult> Get([FromQuery]string login, [FromQuery]int numberOfRows)
         {
             try
             {
                 if (numberOfRows > 100)
                     return BadRequest(new { message = "Couldn't return this count of tasks!" });
 
-                var newTasksInProcess = repository.GetUserTasks(numberOfRows);
+                if (string.IsNullOrWhiteSpace(login))
+                    return BadRequest(new { message = "login not specified!" });
+
+                var user = await repository.GetUser(login);
+
+                if (user == null)
+                    return BadRequest(new { message = "User with certain login not found!" });
+         
+                var newTasksInProcess = await repository.GetUserTasks(user, numberOfRows);
 
                 if (newTasksInProcess == null || newTasksInProcess.Length == 0)
                     return Ok(new { data = newTasksInProcess });
@@ -55,14 +63,17 @@ namespace CRM.Controllers
         }
 
         [HttpGet()]
-        public IActionResult Get(
+        public async Task<IActionResult> Get([FromQuery]string login,
             [FromQuery]int from, [FromQuery]int to,
             [FromQuery]string orderBy, [FromQuery]string sortBy,
             [FromQuery]string filterBy, [FromQuery]string filterValue)
         {
             try
             {
-                if ((to - from) > 20)
+                if (string.IsNullOrWhiteSpace(login))
+                    return BadRequest(new { message = "login not specified!" });
+
+                if ((to - from) > 30)
                     return BadRequest(new { message = "number of rows couldn't be larger than 20" });
 
                 if (string.IsNullOrEmpty(orderBy))
@@ -73,8 +84,13 @@ namespace CRM.Controllers
 
                 if (string.IsNullOrEmpty(sortBy))
                     return BadRequest(new { message = "sortBy parameter not specified!" });
+                
+                var user = await repository.GetUser(login);
+                if (user == null)
+                    return BadRequest(new { message = "User with certain login not found!" });
 
-                var tasks = repository.GetOrderedAndFilteredTasks(from, to, orderBy, sortBy, filterBy, filterValue);
+                var tasks = await repository.GetOrderedAndFilteredTasks(user, from, to, orderBy, sortBy, filterBy, filterValue);
+                
                 return Ok(new { data = modelTransformer.UserTasksToDTOModels(tasks).ToArray(), total = tasks.Count() });
             }
             catch (Exception ex)
@@ -128,7 +144,11 @@ namespace CRM.Controllers
                     return BadRequest(new { message = "Data is not valid" });
 
                 var userTaskModel = modelTransformer.UserTaskDTOModelToModel(userTask);
-                var user = repository.GetUser(userTask.TaskManagerUserLogin);
+                var user = await repository.GetUser(userTask.TaskManagerUserLogin);
+
+                if (user == null)
+                    return BadRequest(new { message = "User with certain login not found!" });
+
                 userTaskModel.TaskManagerUser = user;
 
                 if (userTask.Id <= 0)

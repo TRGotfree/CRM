@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class UserTaskService {
     constructor(private http: HttpClient) { }
 
-    getTasks(numberOfTasks: number): Observable<{data: any[], total: number}> {
+    getTasks(login: string, numberOfTasks: number): Observable<{data: any[], total: number}> {
 
         let url = '/usertask/new';
 
@@ -21,14 +21,15 @@ export class UserTaskService {
         }
 
         const httpParams = new HttpParams()
+            .set('login', login)
             .set('numberOfRows', numberOfTasks.toString());
 
         return this.http.get(url, { params: httpParams }) as Observable<{data: any[], total: number}>;
     }
 
-    getSortedOrFilteredTasks(from: number, to: number,
+    getSortedOrFilteredTasks(login: string, from: number, to: number,
                              orderBy: string, sortBy: string,
-                             filterBy: string, filterValue: string): Observable<{data: any[], total: number}> {
+                             filterBy: string, filterValue: string): Observable<{data: UserTask[], total: number}> {
         try {
 
             let url = '/usertask';
@@ -38,6 +39,7 @@ export class UserTaskService {
             }
 
             const httpParams = new HttpParams()
+                .set('login', login)
                 .set('from', from.toString())
                 .set('to', to.toString())
                 .set('orderBy', orderBy)
@@ -45,7 +47,7 @@ export class UserTaskService {
                 .set('filterBy', filterBy)
                 .set('filterValue', filterValue);
 
-            return this.http.get(url, { params: httpParams }) as Observable<{data: any[], total: number}>;
+            return this.http.get(url, { params: httpParams }) as Observable<{data: UserTask[], total: number}>;
 
         } catch (error) {
             throw error;

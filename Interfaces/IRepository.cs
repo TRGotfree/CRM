@@ -8,13 +8,13 @@ namespace CRM.Interfaces
 {
     public interface IRepository
     {
-        User GetUser(string login, string password);
+        Task<User> GetUser(string login, string password);
 
-        User GetUser(string login);
+        Task<User> GetUser(string login);
 
-        UserTask[] GetUserTasks(int amountOfTasks);
+        Task<UserTask[]> GetUserTasks(User user, int amountOfTasks);
 
-        IEnumerable<UserTask> GetOrderedAndFilteredTasks(int from, int to,
+        Task<IEnumerable<UserTask>> GetOrderedAndFilteredTasks(User user, int from, int to,
             string orderBy, string sortBy,
             string filterBy, string filterValue);
 

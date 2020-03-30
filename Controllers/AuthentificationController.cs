@@ -37,7 +37,7 @@ namespace CRM.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Post([FromBody] DTOModels.User user)
+        public async Task<IActionResult> Post([FromBody] DTOModels.User user)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace CRM.Controllers
                     return BadRequest(new { message = ServerMessage.NOT_VALID_PARAMETERS });
 
                 string passwordHash = hashGenerator.GetHash(user.Password);
-                var userData = repository.GetUser(user.Login, passwordHash);
+                var userData = await repository.GetUser(user.Login, passwordHash);
                 if (userData == null)
                     return StatusCode(401, new { message = ServerMessage.USER_NOT_AUTHORIZED });
 

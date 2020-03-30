@@ -28,12 +28,15 @@ namespace CRM.Services
                .Select(u => new ExecutorUser { Id = u.Id, Name = u.Name });
         }
 
-        public IEnumerable<UserTask> GetOrderedAndFilteredTasks(int from, int to, string orderBy, string sortBy, string filterBy, string filterValue)
+        public async Task<IEnumerable<UserTask>> GetOrderedAndFilteredTasks(User user, int from, int to, string orderBy, string sortBy, string filterBy, string filterValue)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
             try
             {
                 var bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
-                var propertyToOrder = new DTOModels.UserTask().GetType()
+                var propertyToOrder = new Models.UserTask().GetType()
                        .GetProperty(sortBy, bindingFlags);
 
                 if (propertyToOrder == null)
@@ -41,20 +44,21 @@ namespace CRM.Services
 
                 if (!string.IsNullOrWhiteSpace(filterBy) && !string.IsNullOrWhiteSpace(filterValue))
                 {
-                    PropertyInfo propertyToFilter = new DTOModels.UserTask().GetType()
+                    PropertyInfo propertyToFilter = new Models.UserTask().GetType()
                               .GetProperty(filterBy, bindingFlags);
 
                     if (propertyToFilter == null)
                         throw new InvalidOperationException($"Data couldn't be filtered by this parameter! Parameter name: {filterBy}");
 
-                    var tasks = repository.UserTask
+                    var tasks = await repository.UserTask
                                              .Include(u => u.Payload)
                                              .Include(u => u.Priority)
                                              .Include(u => u.TaskManagerUser)
                                              .Include(u => u.UserTaskState)
                                              .Include(u => u.UserTaskType)
-                                             .Include(u => u.ExecutorUser)
-                                             .Where(u => propertyToFilter.GetValue(u, null) != null &&
+                                             .Include(u => u.ExecutorUser).Where(u => u.ExecutorUserId == user.Id).ToListAsync();
+
+                    tasks = tasks.Where(u => propertyToFilter.GetValue(u, null) != null &&
                                                    propertyToFilter.GetValue(u, null).ToString().Contains(filterValue)).ToList();
 
                     if (orderBy == OrderBy.ASCENDING)
@@ -67,27 +71,31 @@ namespace CRM.Services
 
                 if (orderBy == OrderBy.ASCENDING)
                 {
-                    var tasks = repository.UserTask
+                    var tasks = await repository.UserTask
                                           .Include(u => u.Payload)
                                           .Include(u => u.Priority)
                                           .Include(u => u.TaskManagerUser)
                                           .Include(u => u.UserTaskState)
                                           .Include(u => u.UserTaskType)
-                                          .Include(u => u.ExecutorUser)
-                                          .OrderBy(t => propertyToOrder.GetValue(t, null)).Skip(from).Take(to - from).ToList();
+                                          .Include(u => u.ExecutorUser).Where(u => u.ExecutorUserId == user.Id).ToListAsync();
+                    tasks = tasks
+                            .Where(u => propertyToOrder.GetValue(u, null) != null)
+                            .OrderBy(u => propertyToOrder.GetValue(u, null)).Skip(from).Take(to - from).ToList();
 
                     return tasks;
                 }
                 else
                 {
-                    var tasks = repository.UserTask
+                    var tasks = await repository.UserTask
                                           .Include(u => u.Payload)
                                           .Include(u => u.Priority)
                                           .Include(u => u.TaskManagerUser)
                                           .Include(u => u.UserTaskState)
                                           .Include(u => u.UserTaskType)
-                                          .Include(u => u.ExecutorUser)
-                                          .OrderByDescending(t => propertyToOrder.GetValue(t, null)).Skip(from).Take(to - from).ToList();
+                                          .Include(u => u.ExecutorUser).Where(u => u.ExecutorUserId == user.Id).ToListAsync();
+                    tasks = tasks
+                    .Where(u => propertyToOrder.GetValue(u, null) != null)
+                    .OrderByDescending(u => propertyToOrder.GetValue(u, null)).Skip(from).Take(to - from).ToList();
 
                     return tasks;
                 }
@@ -103,7 +111,7 @@ namespace CRM.Services
             return repository.Priority.ToList();
         }
 
-        public User GetUser(string login, string password)
+        public async Task<User> GetUser(string login, string password)
         {
             if (string.IsNullOrWhiteSpace(login))
                 throw new ArgumentNullException(nameof(login));
@@ -111,28 +119,31 @@ namespace CRM.Services
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentNullException(password);
 
-            return repository.User.Include(u => u.UserRole).FirstOrDefault(u => u.Login == login && u.Password == password);
+            return await repository.User.Include(u => u.UserRole).FirstOrDefaultAsync(u => u.Login == login && u.Password == password);
         }
 
-        public User GetUser(string login)
+        public async Task<User> GetUser(string login)
         {
             if (string.IsNullOrWhiteSpace(login))
                 throw new ArgumentNullException(nameof(login));
 
-            return repository.User.FirstOrDefault(u => u.Login == login);
+            return await repository.User.FirstOrDefaultAsync(u => u.Login == login);
         }
 
-        public UserTask[] GetUserTasks(int amountOfTasks)
+        public async Task<UserTask[]> GetUserTasks(User user, int amountOfTasks)
         {
-            return repository.UserTask
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return await repository.UserTask
                       .Include(u => u.Payload)
                       .Include(u => u.Priority)
                       .Include(u => u.TaskManagerUser)
                       .Include(u => u.UserTaskState)
                       .Include(u => u.UserTaskType)
                       .Include(u => u.ExecutorUser)
-                      .Where(ut => ut.UserTaskStateId == (int)UserTaskStates.New ||
-                             ut.UserTaskStateId == (int)UserTaskStates.Proceed).Take(amountOfTasks).ToArray();
+                      .Where(ut => ut.ExecutorUserId == user.Id && ut.UserTaskStateId == (int)UserTaskStates.New ||
+                             ut.UserTaskStateId == (int)UserTaskStates.Proceed).Take(amountOfTasks).ToArrayAsync();
         }
 
         public IEnumerable<UserTaskState> GetUserTaskStates()
@@ -163,7 +174,7 @@ namespace CRM.Services
             if (userTaskType.Id <= 0)
             {
                 userTaskType = new UserTaskType { Name = userTaskType.Name };
-                await repository.UserTaskType.AddAsync(userTaskType); 
+                await repository.UserTaskType.AddAsync(userTaskType);
             }
             else
                 repository.UserTaskType.Update(userTaskType);

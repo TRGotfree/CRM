@@ -5,7 +5,7 @@ export class MatPaginatorIntlRu extends MatPaginatorIntl {
     previousPageLabel = 'Предыдущие элементы';
     getRangeLabel = (page, pageSize, length) => {
         if (length === 0 || pageSize === 0) {
-            return '0 od ' + length;
+            return '0 из ' + length;
         }
         length = Math.max(length, 0);
         const startIndex = page * pageSize;

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CRM.Models
 {
-    public class UserTask
+    public class UserTask : IComparable<UserTask>
     {
         [Required]
         public long Id { get; set; }
@@ -51,5 +52,13 @@ namespace CRM.Models
         public int? PayloadId { get; set; }
 
         public Payload Payload { get; set; }
+
+        public int CompareTo([AllowNull] UserTask other)
+        {
+            if (other == null || this.UserTaskType == null || other.UserTaskType == null)
+                return -1;
+
+            return this.UserTaskType.Name.CompareTo(other.UserTaskType.Name);
+        }
     }
 }
