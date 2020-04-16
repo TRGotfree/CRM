@@ -23,29 +23,12 @@ namespace CRM.Services
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
         }
 
-        public string Issuer
-        {
-            get
-            {
-                return Environment.GetEnvironmentVariable("JWT_ISSUER");
-            }
-        }
+        public string Issuer => Environment.GetEnvironmentVariable("JWT_ISSUER");
 
-        public string Audience
-        {
-            get
-            {
-                return Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-            }
-        }
+        public string Audience => Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 
-        public string Key
-        {
-            get
-            {
-                return Environment.GetEnvironmentVariable("JWT_KEY");
-            }
-        }
+        public string Key => Environment.GetEnvironmentVariable("JWT_KEY");
+        
 
         public int LifeTime
         {

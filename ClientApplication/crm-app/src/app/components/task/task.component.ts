@@ -1,7 +1,7 @@
 // tslint:disable: prefer-for-of
 // tslint:disable: align
 import {
-    Component, OnInit, ChangeDetectionStrategy, Inject, AfterViewInit
+  Component, OnInit, ChangeDetectionStrategy, Inject, AfterViewInit
 } from '@angular/core';
 
 import { UserTask } from '../../models/userTask';
@@ -13,110 +13,145 @@ import { PriorityService } from '../../services/priority.service';
 import { UserService } from '../../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserTaskType } from '../../models/userTaskType';
 import { UserTaskTypeComponent } from '../usertasktype/usertasktype.component';
 import { User } from '../../models/user';
 
 @Component({
-    selector: 'app-task',
-    templateUrl: './task.component.html',
-    styleUrls: ['./task.component.css']
+  selector: 'app-task',
+  templateUrl: './task.component.html',
+  styleUrls: ['./task.component.css']
 })
 export class TaskComponent implements OnInit, AfterViewInit {
 
-    constructor(public dialogRef: MatDialogRef<TaskComponent>,
-        @Inject(MAT_DIALOG_DATA) public userTask: UserTask,
-        public userTaskTypeDialog: MatDialog,
-        private userTaskService: UserTaskService,
-        private userTaskTypeService: UserTaskTypeService,
-        private priorityService: PriorityService,
-        private userService: UserService,
-        private snackBar: MatSnackBar) { }
+  constructor(public dialogRef: MatDialogRef<TaskComponent>,
+    @Inject(MAT_DIALOG_DATA) public userTask: UserTask,
+    public userTaskTypeDialog: MatDialog,
+    private userTaskService: UserTaskService,
+    private userTaskTypeService: UserTaskTypeService,
+    private priorityService: PriorityService,
+    private userService: UserService,
+    private snackBar: MatSnackBar) { }
 
-    taskTypes: UserTaskType[] = [];
-    priorities: Priority[] = [];
-    executorUsers: ExecutorUser[] = [];
-    caption = 'Новая задача';
-    taskTypeControl = new FormControl('', [Validators.required]);
-    priorityControl = new FormControl('', [Validators.required]);
-    executorUserControl = new FormControl('', [Validators.required]);
-    executionDateControl = new FormControl('', [Validators.required]);
+  userTaskFormGroup: FormGroup;
+  taskTypes: UserTaskType[] = [];
+  priorities: Priority[] = [];
+  executorUsers: ExecutorUser[] = [];
+  caption = (this.userTask && this.userTask.id > 0) ? 'Задача №' + this.userTask.id : 'Новая задача';
+  taskTypeControl = new FormControl(this.userTask.userTaskType, [Validators.required]);
+  priorityControl = new FormControl(this.userTask.priority, [Validators.required]);
+  executorUserControl = new FormControl(this.userTask.executorUser, [Validators.required]);
+  executionDateControl = new FormControl(this.userTask.executeTaskUntilDate, [Validators.required]);
+  descriptionControl = new FormControl(this.userTask.description);
+  additinalFileControl = new FormControl();
 
-    ngOnInit(): void {
-        this.userTaskTypeService.getTaskTypes().subscribe(res => {
-            if (!res || !res.data) {
-                this.snackBar.open('Произошла ошибка во время получения данных по типам задач!', 'OK', { duration: 3000 });
-                return;
-            }
-            this.taskTypes = res.data;
-        }, error => {
-            this.snackBar.open('Произошла ошибка во время получения данных по типам задач!', 'OK', { duration: 3000 });
+  //validateMessage: string;
+
+  ngOnInit(): void {
+
+    this.userTaskFormGroup =
+      new FormGroup(
+        {
+          userTaskType: this.taskTypeControl,
+          priority: this.priorityControl,
+          executorUser: this.executorUserControl,
+          executionDate: this.executionDateControl,
+          description: this.descriptionControl,
+          additinalFile: this.additinalFileControl
         });
 
-        this.priorityService.getPriorities().subscribe(res => {
-            if (!res || !res.data) {
-                this.snackBar.open('Произошла ошибка во время получения данных по приоритетам задач!', 'OK', { duration: 3000 });
-                return;
-            }
+    this.userTaskTypeService.getTaskTypes().subscribe(res => {
+      if (!res || !res.data) {
+        this.snackBar.open('Произошла ошибка во время получения данных по типам задач!', 'OK', { duration: 3000 });
+        return;
+      }
+      this.taskTypes = res.data;
+    }, error => {
+      this.snackBar.open('Произошла ошибка во время получения данных по типам задач!', 'OK', { duration: 3000 });
+    });
 
-            this.priorities = res.data;
-        }, error => {
-            this.snackBar.open('Произошла ошибка во время получения данных по приоритетам задач!', 'OK', { duration: 3000 });
-        });
+    this.priorityService.getPriorities().subscribe(res => {
+      if (!res || !res.data) {
+        this.snackBar.open('Произошла ошибка во время получения данных по приоритетам задач!', 'OK', { duration: 3000 });
+        return;
+      }
 
-        this.userService.getExecutorUsers().subscribe(res => {
-            if (!res || !res.data) {
-                this.snackBar.open('Произошла ошибка во время получения данных по исполнителям задач!', 'OK', { duration: 3000 });
-                return;
-            }
+      this.priorities = res.data;
+    }, error => {
+      this.snackBar.open('Произошла ошибка во время получения данных по приоритетам задач!', 'OK', { duration: 3000 });
+    });
 
-            this.executorUsers = res.data;
-        }, error => {
-            this.snackBar.open('Произошла ошибка во время получения данных по исполнителям задач!', 'OK', { duration: 3000 });
-        });
+    this.userService.getExecutorUsers().subscribe(res => {
+      if (!res || !res.data) {
+        this.snackBar.open('Произошла ошибка во время получения данных по исполнителям задач!', 'OK', { duration: 3000 });
+        return;
+      }
+
+      this.executorUsers = res.data;
+    }, error => {
+      this.snackBar.open('Произошла ошибка во время получения данных по исполнителям задач!', 'OK', { duration: 3000 });
+    });
+  }
+
+  ngAfterViewInit(): void {
+
+  }
+
+  addTaskType(): void {
+    const taskTypeDialog = this.userTaskTypeDialog.open(UserTaskTypeComponent, { width: '400px', height: '250px', data: {} });
+    taskTypeDialog.afterClosed().subscribe(newTaskType => {
+      if (!newTaskType) {
+        return;
+      }
+      this.taskTypes.push(newTaskType);
+      this.taskTypeControl.setValue(newTaskType.name);
+    });
+  }
+
+  save(data: any): void {
+
+    if (!this.userTask) { return; }
+
+    if (this.taskTypeControl.invalid) {
+      return;
     }
 
-    ngAfterViewInit(): void {
-
+    if (this.priorityControl.invalid) {
+      return;
     }
 
-    addTaskType(): void {
-        const taskTypeDialog = this.userTaskTypeDialog.open(UserTaskTypeComponent, { width: '30%', height: '25%', data: {} });
-        taskTypeDialog.afterClosed().subscribe(newTaskType => {
-            if (!newTaskType) {
-                return;
-            }
-            this.taskTypes.push(newTaskType);
-        });
+    if (this.executorUserControl.invalid) {
+      return;
     }
 
-    save(): void {
-        if (!this.userTask) { return; }
-
-        this.userTask.executeTaskUntilDate = this.executionDateControl.value.format();
-
-        const currentUser = JSON.parse(sessionStorage.getItem('user')) as User;
-        if (!currentUser) {
-            this.snackBar.open('Не удалось сохранить задачу! Не удается получить текущего пользователя!', 'OK', { duration: 3000 });
-            return;
-        }
-
-        this.userTask.taskManagerUserLogin = currentUser.login;
-
-        this.userTaskService.saveTask(this.userTask).subscribe(res => {
-            if (!res || !res.data) {
-                this.snackBar.open('Не удалось сохранить задачу!', 'OK', { duration: 3000 });
-                return;
-            }
-
-            this.dialogRef.close(res.data);
-        }, error => {
-            this.snackBar.open('Не удалось сохранить задачу!', 'OK', { duration: 3000 });
-        });
+    if (this.executionDateControl.invalid) {
+      return;
     }
 
-    cancel(): void {
-        this.dialogRef.close();
+    this.userTask.executeTaskUntilDate = this.executionDateControl.value.format();
+
+    const currentUser = JSON.parse(sessionStorage.getItem('user')) as User;
+    if (!currentUser) {
+      this.snackBar.open('Не удалось сохранить задачу! Не удается получить текущего пользователя!', 'OK', { duration: 3000 });
+      return;
     }
+
+    this.userTask.taskManagerUserLogin = currentUser.login;
+
+    this.userTaskService.saveTask(this.userTask).subscribe(res => {
+      if (!res || !res.data) {
+        this.snackBar.open('Не удалось сохранить задачу!', 'OK', { duration: 3000 });
+        return;
+      }
+
+      this.dialogRef.close(res.data);
+    }, error => {
+      this.snackBar.open('Не удалось сохранить задачу!', 'OK', { duration: 3000 });
+    });
+  }
+
+  cancel(): void {
+    this.dialogRef.close();
+  }
 }

@@ -75,3 +75,7 @@ mat-dialog-actions {
     background-color: white;
     color: #BB3268;
 }
+
+em {
+  color: #BB3268;
+}

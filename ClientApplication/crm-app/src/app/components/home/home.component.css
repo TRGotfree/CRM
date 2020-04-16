@@ -23,6 +23,7 @@ mat-card {
   width: 100%;
   color: white;
   background-color: #3F51B5;
+  min-width: 200px;
 }
 
 mat-card-header {
@@ -52,6 +53,7 @@ mat-card-actions button a {
 
 mat-card-actions button {
   width: 40%;
+  min-width: 100px;
 }
 
 mat-card-content {
@@ -121,6 +123,7 @@ mat-row:hover {
 }
 
 #btn-new-task {
+  min-width: 150px;
   width: 12%;
 }
 

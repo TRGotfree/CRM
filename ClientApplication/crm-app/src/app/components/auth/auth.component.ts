@@ -19,7 +19,7 @@ export class AuthComponent implements OnInit {
   ngOnInit() {
   }
 
-  authUser() {
+  authUser(values: any) {
     try {
 
       if (!this.login) {

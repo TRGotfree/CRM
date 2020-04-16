@@ -149,7 +149,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   newTask(): void {
-    const newTaskDialog = this.taskDialog.open(TaskComponent, { width: '40%', height: '45%', data: {} });
+    const newTaskDialog = this.taskDialog.open(TaskComponent, { width: '700px', height: '450px', data: {} });
     newTaskDialog.afterClosed().subscribe(newTaskData => {
       if (!newTaskData) {
         return;
